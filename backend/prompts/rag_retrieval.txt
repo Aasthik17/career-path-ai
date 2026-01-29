@@ -1,0 +1,22 @@
+Given the following user profile, formulate an optimal search query to find the most relevant:
+1. Job postings that match their skills and experience level
+2. Skills they should develop for career advancement
+3. Learning resources, courses, and certifications
+
+User Profile:
+- Summary: {summary}
+- Current Skills: {skills}
+- Experience Level: {career_level}
+- Years of Experience: {experience_years}
+- Domain: {primary_domain}
+
+Career Goals: {career_goals}
+
+Generate a search query that will retrieve the most relevant results from our knowledge base.
+The query should:
+- Focus on skills gaps and career advancement opportunities
+- Consider the user's current level and realistic next steps
+- Include specific job titles and skill combinations
+- Be optimized for semantic similarity search
+
+Query:

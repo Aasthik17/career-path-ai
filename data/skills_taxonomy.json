@@ -1,0 +1,404 @@
+{
+    "skills_taxonomy": {
+        "programming_languages": {
+            "category": "Programming Languages",
+            "skills": [
+                {
+                    "name": "Python",
+                    "demand": "Very High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 15
+                },
+                {
+                    "name": "JavaScript",
+                    "demand": "Very High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 12
+                },
+                {
+                    "name": "TypeScript",
+                    "demand": "High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 18
+                },
+                {
+                    "name": "Java",
+                    "demand": "High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 14
+                },
+                {
+                    "name": "Go",
+                    "demand": "High",
+                    "difficulty": "Medium-High",
+                    "avg_salary_premium": 22
+                },
+                {
+                    "name": "Rust",
+                    "demand": "Medium",
+                    "difficulty": "High",
+                    "avg_salary_premium": 25
+                },
+                {
+                    "name": "C++",
+                    "demand": "Medium",
+                    "difficulty": "High",
+                    "avg_salary_premium": 20
+                },
+                {
+                    "name": "SQL",
+                    "demand": "Very High",
+                    "difficulty": "Low-Medium",
+                    "avg_salary_premium": 8
+                }
+            ]
+        },
+        "cloud_platforms": {
+            "category": "Cloud & Infrastructure",
+            "skills": [
+                {
+                    "name": "AWS",
+                    "demand": "Very High",
+                    "difficulty": "Medium-High",
+                    "avg_salary_premium": 20
+                },
+                {
+                    "name": "Azure",
+                    "demand": "High",
+                    "difficulty": "Medium-High",
+                    "avg_salary_premium": 18
+                },
+                {
+                    "name": "GCP",
+                    "demand": "High",
+                    "difficulty": "Medium-High",
+                    "avg_salary_premium": 18
+                },
+                {
+                    "name": "Kubernetes",
+                    "demand": "High",
+                    "difficulty": "High",
+                    "avg_salary_premium": 25
+                },
+                {
+                    "name": "Docker",
+                    "demand": "Very High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 12
+                },
+                {
+                    "name": "Terraform",
+                    "demand": "High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 20
+                }
+            ]
+        },
+        "data_ml": {
+            "category": "Data & Machine Learning",
+            "skills": [
+                {
+                    "name": "Machine Learning",
+                    "demand": "Very High",
+                    "difficulty": "High",
+                    "avg_salary_premium": 30
+                },
+                {
+                    "name": "Deep Learning",
+                    "demand": "High",
+                    "difficulty": "Very High",
+                    "avg_salary_premium": 35
+                },
+                {
+                    "name": "NLP",
+                    "demand": "High",
+                    "difficulty": "High",
+                    "avg_salary_premium": 32
+                },
+                {
+                    "name": "Computer Vision",
+                    "demand": "High",
+                    "difficulty": "High",
+                    "avg_salary_premium": 30
+                },
+                {
+                    "name": "Data Engineering",
+                    "demand": "High",
+                    "difficulty": "Medium-High",
+                    "avg_salary_premium": 22
+                },
+                {
+                    "name": "MLOps",
+                    "demand": "High",
+                    "difficulty": "High",
+                    "avg_salary_premium": 28
+                },
+                {
+                    "name": "LLMs/GenAI",
+                    "demand": "Very High",
+                    "difficulty": "High",
+                    "avg_salary_premium": 40
+                }
+            ]
+        },
+        "frontend": {
+            "category": "Frontend Development",
+            "skills": [
+                {
+                    "name": "React",
+                    "demand": "Very High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 15
+                },
+                {
+                    "name": "Vue.js",
+                    "demand": "Medium",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 12
+                },
+                {
+                    "name": "Angular",
+                    "demand": "Medium",
+                    "difficulty": "Medium-High",
+                    "avg_salary_premium": 12
+                },
+                {
+                    "name": "Next.js",
+                    "demand": "High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 18
+                },
+                {
+                    "name": "CSS/Tailwind",
+                    "demand": "High",
+                    "difficulty": "Low-Medium",
+                    "avg_salary_premium": 5
+                }
+            ]
+        },
+        "backend": {
+            "category": "Backend Development",
+            "skills": [
+                {
+                    "name": "Node.js",
+                    "demand": "High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 14
+                },
+                {
+                    "name": "Spring Boot",
+                    "demand": "High",
+                    "difficulty": "Medium-High",
+                    "avg_salary_premium": 16
+                },
+                {
+                    "name": "FastAPI",
+                    "demand": "High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 15
+                },
+                {
+                    "name": "GraphQL",
+                    "demand": "Medium",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 12
+                },
+                {
+                    "name": "Microservices",
+                    "demand": "High",
+                    "difficulty": "High",
+                    "avg_salary_premium": 20
+                }
+            ]
+        },
+        "databases": {
+            "category": "Databases & Storage",
+            "skills": [
+                {
+                    "name": "PostgreSQL",
+                    "demand": "Very High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 12
+                },
+                {
+                    "name": "MongoDB",
+                    "demand": "High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 10
+                },
+                {
+                    "name": "Redis",
+                    "demand": "High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 12
+                },
+                {
+                    "name": "Elasticsearch",
+                    "demand": "Medium",
+                    "difficulty": "Medium-High",
+                    "avg_salary_premium": 15
+                },
+                {
+                    "name": "Snowflake",
+                    "demand": "High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 18
+                }
+            ]
+        },
+        "devops_sre": {
+            "category": "DevOps & SRE",
+            "skills": [
+                {
+                    "name": "CI/CD",
+                    "demand": "Very High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 15
+                },
+                {
+                    "name": "GitOps",
+                    "demand": "Medium",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 14
+                },
+                {
+                    "name": "Monitoring (Prometheus/Grafana)",
+                    "demand": "High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 15
+                },
+                {
+                    "name": "Infrastructure as Code",
+                    "demand": "High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 18
+                }
+            ]
+        },
+        "soft_skills": {
+            "category": "Soft Skills",
+            "skills": [
+                {
+                    "name": "Communication",
+                    "demand": "Very High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 10
+                },
+                {
+                    "name": "Leadership",
+                    "demand": "High",
+                    "difficulty": "High",
+                    "avg_salary_premium": 25
+                },
+                {
+                    "name": "Problem Solving",
+                    "demand": "Very High",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 15
+                },
+                {
+                    "name": "System Design",
+                    "demand": "High",
+                    "difficulty": "High",
+                    "avg_salary_premium": 25
+                },
+                {
+                    "name": "Mentoring",
+                    "demand": "Medium",
+                    "difficulty": "Medium",
+                    "avg_salary_premium": 15
+                }
+            ]
+        }
+    },
+    "career_paths": {
+        "software_engineer": {
+            "title": "Software Engineer Track",
+            "levels": [
+                {
+                    "level": "Entry",
+                    "years": "0-2",
+                    "salary_range": "$70k-$100k",
+                    "key_skills": [
+                        "Programming",
+                        "Git",
+                        "Testing"
+                    ]
+                },
+                {
+                    "level": "Mid",
+                    "years": "2-5",
+                    "salary_range": "$100k-$150k",
+                    "key_skills": [
+                        "System Design",
+                        "Mentoring",
+                        "Cloud"
+                    ]
+                },
+                {
+                    "level": "Senior",
+                    "years": "5-8",
+                    "salary_range": "$150k-$200k",
+                    "key_skills": [
+                        "Architecture",
+                        "Leadership",
+                        "Strategy"
+                    ]
+                },
+                {
+                    "level": "Staff",
+                    "years": "8+",
+                    "salary_range": "$200k-$300k",
+                    "key_skills": [
+                        "Technical Vision",
+                        "Cross-team Leadership"
+                    ]
+                }
+            ]
+        },
+        "data_scientist": {
+            "title": "Data Science Track",
+            "levels": [
+                {
+                    "level": "Entry",
+                    "years": "0-2",
+                    "salary_range": "$80k-$110k",
+                    "key_skills": [
+                        "Python",
+                        "Statistics",
+                        "SQL"
+                    ]
+                },
+                {
+                    "level": "Mid",
+                    "years": "2-5",
+                    "salary_range": "$110k-$150k",
+                    "key_skills": [
+                        "ML Models",
+                        "Deep Learning",
+                        "Experimentation"
+                    ]
+                },
+                {
+                    "level": "Senior",
+                    "years": "5-8",
+                    "salary_range": "$150k-$200k",
+                    "key_skills": [
+                        "ML Systems",
+                        "Research",
+                        "Strategy"
+                    ]
+                },
+                {
+                    "level": "Principal",
+                    "years": "8+",
+                    "salary_range": "$200k-$350k",
+                    "key_skills": [
+                        "Research Direction",
+                        "Innovation"
+                    ]
+                }
+            ]
+        }
+    }
+}

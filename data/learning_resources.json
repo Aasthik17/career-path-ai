@@ -1,0 +1,272 @@
+{
+    "learning_resources": [
+        {
+            "id": "lr001",
+            "title": "AWS Certified Solutions Architect - Associate",
+            "type": "certification",
+            "provider": "Amazon Web Services",
+            "url": "https://aws.amazon.com/certification/certified-solutions-architect-associate/",
+            "duration": "40-80 hours",
+            "cost": "$150 (exam)",
+            "difficulty": "Intermediate",
+            "skills_covered": [
+                "AWS",
+                "Cloud Architecture",
+                "Security",
+                "Networking"
+            ],
+            "description": "Industry-recognized certification validating ability to design distributed systems on AWS. Highly valued by employers for cloud roles.",
+            "prerequisites": [
+                "Basic AWS knowledge",
+                "Networking fundamentals"
+            ],
+            "career_impact": "Opens doors to cloud architect and DevOps roles. Average salary increase of 15-20%."
+        },
+        {
+            "id": "lr002",
+            "title": "Machine Learning Specialization",
+            "type": "course",
+            "provider": "Coursera (Stanford/DeepLearning.AI)",
+            "url": "https://www.coursera.org/specializations/machine-learning-introduction",
+            "duration": "3 months (10 hrs/week)",
+            "cost": "$49/month",
+            "difficulty": "Intermediate",
+            "skills_covered": [
+                "Machine Learning",
+                "Python",
+                "TensorFlow",
+                "Neural Networks"
+            ],
+            "description": "Comprehensive introduction to machine learning by Andrew Ng. Covers supervised learning, neural networks, and practical ML applications.",
+            "prerequisites": [
+                "Python",
+                "Basic Math/Statistics"
+            ],
+            "career_impact": "Foundation for ML Engineer or Data Scientist roles. Gateway to AI field."
+        },
+        {
+            "id": "lr003",
+            "title": "System Design Interview Course",
+            "type": "course",
+            "provider": "Educative",
+            "url": "https://www.educative.io/courses/grokking-modern-system-design-interview-for-engineers-managers",
+            "duration": "50 hours",
+            "cost": "$79",
+            "difficulty": "Intermediate-Advanced",
+            "skills_covered": [
+                "System Design",
+                "Architecture",
+                "Scalability",
+                "Databases"
+            ],
+            "description": "Learn to design large-scale distributed systems. Essential for senior engineering interviews at top tech companies.",
+            "prerequisites": [
+                "2+ years development experience",
+                "Backend fundamentals"
+            ],
+            "career_impact": "Critical for senior engineering roles. Increases interview success rate significantly."
+        },
+        {
+            "id": "lr004",
+            "title": "Kubernetes Administrator (CKA)",
+            "type": "certification",
+            "provider": "CNCF/Linux Foundation",
+            "url": "https://www.cncf.io/certification/cka/",
+            "duration": "40-60 hours",
+            "cost": "$395 (exam)",
+            "difficulty": "Advanced",
+            "skills_covered": [
+                "Kubernetes",
+                "Container Orchestration",
+                "DevOps",
+                "Linux"
+            ],
+            "description": "Professional certification for Kubernetes administrators. Proves hands-on ability to manage K8s clusters.",
+            "prerequisites": [
+                "Docker experience",
+                "Linux command line",
+                "Basic K8s knowledge"
+            ],
+            "career_impact": "High demand certification. Average salary premium of $20-30k for certified professionals."
+        },
+        {
+            "id": "lr005",
+            "title": "React - The Complete Guide",
+            "type": "course",
+            "provider": "Udemy",
+            "url": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+            "duration": "65 hours",
+            "cost": "$20 (sale price)",
+            "difficulty": "Beginner-Intermediate",
+            "skills_covered": [
+                "React",
+                "Redux",
+                "Next.js",
+                "TypeScript",
+                "Testing"
+            ],
+            "description": "Comprehensive React course covering fundamentals to advanced patterns. Includes real-world projects.",
+            "prerequisites": [
+                "HTML/CSS",
+                "JavaScript basics"
+            ],
+            "career_impact": "Essential for frontend developer roles. React is the most in-demand frontend framework."
+        },
+        {
+            "id": "lr006",
+            "title": "Data Engineering with Python",
+            "type": "course",
+            "provider": "DataCamp",
+            "url": "https://www.datacamp.com/tracks/data-engineer-with-python",
+            "duration": "60 hours",
+            "cost": "$25/month",
+            "difficulty": "Intermediate",
+            "skills_covered": [
+                "Python",
+                "SQL",
+                "ETL",
+                "Airflow",
+                "Spark"
+            ],
+            "description": "Learn to build data pipelines and infrastructure. Covers ETL, data warehousing, and orchestration tools.",
+            "prerequisites": [
+                "Python basics",
+                "SQL fundamentals"
+            ],
+            "career_impact": "Data engineering is one of fastest growing roles. High demand, competitive salaries."
+        },
+        {
+            "id": "lr007",
+            "title": "LangChain for LLM Application Development",
+            "type": "course",
+            "provider": "DeepLearning.AI",
+            "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+            "duration": "3 hours",
+            "cost": "Free",
+            "difficulty": "Intermediate",
+            "skills_covered": [
+                "LLMs",
+                "LangChain",
+                "Python",
+                "RAG",
+                "AI Applications"
+            ],
+            "description": "Learn to build LLM-powered applications using LangChain. Covers chains, agents, and memory.",
+            "prerequisites": [
+                "Python",
+                "Basic understanding of LLMs"
+            ],
+            "career_impact": "Cutting-edge skill for AI/ML roles. High demand for GenAI developers."
+        },
+        {
+            "id": "lr008",
+            "title": "Terraform Associate Certification",
+            "type": "certification",
+            "provider": "HashiCorp",
+            "url": "https://www.hashicorp.com/certification/terraform-associate",
+            "duration": "20-40 hours",
+            "cost": "$70.50 (exam)",
+            "difficulty": "Intermediate",
+            "skills_covered": [
+                "Terraform",
+                "Infrastructure as Code",
+                "Cloud",
+                "DevOps"
+            ],
+            "description": "Validate your Terraform skills. Covers IaC concepts, Terraform workflow, and cloud provisioning.",
+            "prerequisites": [
+                "Cloud experience (AWS/Azure/GCP)",
+                "Basic IaC understanding"
+            ],
+            "career_impact": "Standard for DevOps/Platform engineering roles. Demonstrates IaC competency."
+        },
+        {
+            "id": "lr009",
+            "title": "Full Stack Open",
+            "type": "course",
+            "provider": "University of Helsinki",
+            "url": "https://fullstackopen.com/en/",
+            "duration": "200 hours",
+            "cost": "Free",
+            "difficulty": "Intermediate",
+            "skills_covered": [
+                "React",
+                "Node.js",
+                "MongoDB",
+                "GraphQL",
+                "TypeScript",
+                "CI/CD"
+            ],
+            "description": "Free, comprehensive full stack course. Covers modern JavaScript development end-to-end.",
+            "prerequisites": [
+                "Programming basics",
+                "Some web development experience"
+            ],
+            "career_impact": "Excellent for transitioning to full stack development. Highly regarded by employers."
+        },
+        {
+            "id": "lr010",
+            "title": "Communication and Leadership for Tech Professionals",
+            "type": "course",
+            "provider": "LinkedIn Learning",
+            "url": "https://www.linkedin.com/learning/paths/develop-your-tech-leadership-skills",
+            "duration": "15 hours",
+            "cost": "$30/month (LinkedIn Premium)",
+            "difficulty": "All Levels",
+            "skills_covered": [
+                "Communication",
+                "Leadership",
+                "Presentation",
+                "Team Management"
+            ],
+            "description": "Develop soft skills essential for career advancement. Covers presenting, leading teams, and stakeholder management.",
+            "prerequisites": [
+                "None",
+            ],
+            "career_impact": "Critical for moving into senior and management roles. Often the differentiator for promotions."
+        }
+    ],
+    "books": [
+        {
+            "id": "b001",
+            "title": "Designing Data-Intensive Applications",
+            "author": "Martin Kleppmann",
+            "url": "https://dataintensive.net/",
+            "skills_covered": [
+                "System Design",
+                "Databases",
+                "Distributed Systems"
+            ],
+            "description": "The bible of data systems design. Essential reading for any senior engineer.",
+            "difficulty": "Advanced"
+        },
+        {
+            "id": "b002",
+            "title": "Clean Code",
+            "author": "Robert C. Martin",
+            "skills_covered": [
+                "Code Quality",
+                "Best Practices",
+                "Refactoring"
+            ],
+            "description": "Learn to write readable, maintainable code. Timeless principles for all developers.",
+            "difficulty": "Beginner-Intermediate"
+        }
+    ],
+    "communities": [
+        {
+            "id": "c001",
+            "name": "Dev.to",
+            "type": "Online Community",
+            "url": "https://dev.to/",
+            "description": "Inclusive community for developers. Great for sharing knowledge and networking."
+        },
+        {
+            "id": "c002",
+            "name": "Local Tech Meetups",
+            "type": "In-Person",
+            "url": "https://www.meetup.com/",
+            "description": "Find local tech meetups for networking and learning. Great for career opportunities."
+        }
+    ]
+}

@@ -1,0 +1,394 @@
+{
+    "job_postings": [
+        {
+            "id": "jp001",
+            "title": "Senior Software Engineer",
+            "company": "TechCorp Inc.",
+            "location": "Remote / San Francisco, CA",
+            "type": "Full-time",
+            "experience_level": "Senior",
+            "salary_range": "$150,000 - $200,000",
+            "description": "We're looking for a Senior Software Engineer to lead development of our cloud-native applications. You'll work on microservices architecture, mentor junior engineers, and drive technical decisions.",
+            "required_skills": [
+                "Python",
+                "AWS",
+                "Kubernetes",
+                "Docker",
+                "PostgreSQL",
+                "REST APIs",
+                "CI/CD"
+            ],
+            "preferred_skills": [
+                "Go",
+                "Terraform",
+                "GraphQL",
+                "Redis",
+                "Kafka"
+            ],
+            "responsibilities": [
+                "Design and implement scalable microservices",
+                "Lead code reviews and mentor team members",
+                "Collaborate with product managers on technical solutions",
+                "Improve system reliability and performance",
+                "Participate in on-call rotation"
+            ],
+            "benefits": [
+                "Health insurance",
+                "401k matching",
+                "Remote work",
+                "Learning budget"
+            ],
+            "posted_date": "2024-01-15",
+            "url": "https://example.com/jobs/senior-swe"
+        },
+        {
+            "id": "jp002",
+            "title": "Machine Learning Engineer",
+            "company": "AI Labs",
+            "location": "New York, NY",
+            "type": "Full-time",
+            "experience_level": "Mid",
+            "salary_range": "$130,000 - $170,000",
+            "description": "Join our ML team to build production machine learning systems. Work on NLP, recommendation systems, and deploy models at scale.",
+            "required_skills": [
+                "Python",
+                "PyTorch",
+                "TensorFlow",
+                "scikit-learn",
+                "SQL",
+                "AWS SageMaker"
+            ],
+            "preferred_skills": [
+                "MLOps",
+                "Kubernetes",
+                "Spark",
+                "Airflow",
+                "LangChain"
+            ],
+            "responsibilities": [
+                "Develop and train ML models for production use",
+                "Build data pipelines for feature engineering",
+                "Deploy and monitor models in production",
+                "Collaborate with data scientists on model improvements",
+                "Implement A/B testing frameworks"
+            ],
+            "benefits": [
+                "Equity",
+                "Health insurance",
+                "Flexible hours",
+                "Conference budget"
+            ],
+            "posted_date": "2024-01-10",
+            "url": "https://example.com/jobs/ml-engineer"
+        },
+        {
+            "id": "jp003",
+            "title": "Frontend Developer",
+            "company": "StartupXYZ",
+            "location": "Remote",
+            "type": "Full-time",
+            "experience_level": "Mid",
+            "salary_range": "$100,000 - $140,000",
+            "description": "Build beautiful, responsive web applications using React and modern frontend technologies. Focus on user experience and performance.",
+            "required_skills": [
+                "React",
+                "TypeScript",
+                "JavaScript",
+                "CSS",
+                "HTML",
+                "REST APIs"
+            ],
+            "preferred_skills": [
+                "Next.js",
+                "Redux",
+                "GraphQL",
+                "Testing (Jest, Cypress)",
+                "Figma"
+            ],
+            "responsibilities": [
+                "Develop responsive web applications",
+                "Implement pixel-perfect designs from Figma",
+                "Optimize frontend performance",
+                "Write unit and integration tests",
+                "Collaborate with designers and backend engineers"
+            ],
+            "benefits": [
+                "Remote work",
+                "Health insurance",
+                "Stock options"
+            ],
+            "posted_date": "2024-01-12",
+            "url": "https://example.com/jobs/frontend-dev"
+        },
+        {
+            "id": "jp004",
+            "title": "Data Engineer",
+            "company": "DataDriven Corp",
+            "location": "Seattle, WA",
+            "type": "Full-time",
+            "experience_level": "Senior",
+            "salary_range": "$140,000 - $180,000",
+            "description": "Design and build data infrastructure to support analytics and machine learning. Work with petabyte-scale data using modern data stack.",
+            "required_skills": [
+                "Python",
+                "SQL",
+                "Spark",
+                "Airflow",
+                "AWS",
+                "Snowflake"
+            ],
+            "preferred_skills": [
+                "dbt",
+                "Kafka",
+                "Databricks",
+                "Terraform",
+                "Kubernetes"
+            ],
+            "responsibilities": [
+                "Design data models and ETL pipelines",
+                "Build and maintain data warehouse",
+                "Optimize query performance",
+                "Implement data quality monitoring",
+                "Support data science team"
+            ],
+            "benefits": [
+                "Health insurance",
+                "401k",
+                "Learning stipend",
+                "Remote flexibility"
+            ],
+            "posted_date": "2024-01-08",
+            "url": "https://example.com/jobs/data-engineer"
+        },
+        {
+            "id": "jp005",
+            "title": "DevOps Engineer",
+            "company": "CloudFirst",
+            "location": "Austin, TX / Remote",
+            "type": "Full-time",
+            "experience_level": "Mid",
+            "salary_range": "$120,000 - $160,000",
+            "description": "Build and maintain CI/CD pipelines, manage cloud infrastructure, and improve developer experience through automation.",
+            "required_skills": [
+                "AWS",
+                "Terraform",
+                "Kubernetes",
+                "Docker",
+                "CI/CD",
+                "Linux"
+            ],
+            "preferred_skills": [
+                "Python",
+                "Go",
+                "Ansible",
+                "Prometheus",
+                "Grafana"
+            ],
+            "responsibilities": [
+                "Design and implement CI/CD pipelines",
+                "Manage AWS infrastructure using IaC",
+                "Monitor system health and respond to incidents",
+                "Automate repetitive tasks",
+                "Improve deployment frequency and reliability"
+            ],
+            "benefits": [
+                "Remote work",
+                "Health insurance",
+                "Certification support"
+            ],
+            "posted_date": "2024-01-14",
+            "url": "https://example.com/jobs/devops-engineer"
+        },
+        {
+            "id": "jp006",
+            "title": "Product Manager",
+            "company": "Innovation Inc.",
+            "location": "San Francisco, CA",
+            "type": "Full-time",
+            "experience_level": "Senior",
+            "salary_range": "$160,000 - $220,000",
+            "description": "Lead product strategy for our core platform. Work with engineering, design, and business teams to deliver impactful features.",
+            "required_skills": [
+                "Product Strategy",
+                "Roadmapping",
+                "Agile",
+                "Data Analysis",
+                "Stakeholder Management"
+            ],
+            "preferred_skills": [
+                "SQL",
+                "A/B Testing",
+                "User Research",
+                "Technical Background"
+            ],
+            "responsibilities": [
+                "Define product vision and roadmap",
+                "Prioritize features based on business impact",
+                "Conduct user research and analysis",
+                "Work with engineering on technical feasibility",
+                "Present to leadership and stakeholders"
+            ],
+            "benefits": [
+                "Equity",
+                "Health insurance",
+                "Parental leave",
+                "Flexible PTO"
+            ],
+            "posted_date": "2024-01-11",
+            "url": "https://example.com/jobs/product-manager"
+        },
+        {
+            "id": "jp007",
+            "title": "Backend Engineer",
+            "company": "FinTech Solutions",
+            "location": "Chicago, IL",
+            "type": "Full-time",
+            "experience_level": "Entry",
+            "salary_range": "$80,000 - $110,000",
+            "description": "Join our backend team to build scalable APIs and services for our financial platform. Great opportunity for growth.",
+            "required_skills": [
+                "Java",
+                "Spring Boot",
+                "SQL",
+                "REST APIs",
+                "Git"
+            ],
+            "preferred_skills": [
+                "Microservices",
+                "Docker",
+                "AWS",
+                "Kafka",
+                "Redis"
+            ],
+            "responsibilities": [
+                "Develop and maintain backend services",
+                "Write clean, testable code",
+                "Participate in code reviews",
+                "Debug and fix production issues",
+                "Learn from senior engineers"
+            ],
+            "benefits": [
+                "Health insurance",
+                "401k",
+                "Mentorship program",
+                "Training budget"
+            ],
+            "posted_date": "2024-01-13",
+            "url": "https://example.com/jobs/backend-engineer"
+        },
+        {
+            "id": "jp008",
+            "title": "Cloud Solutions Architect",
+            "company": "Enterprise Tech",
+            "location": "Remote",
+            "type": "Full-time",
+            "experience_level": "Lead",
+            "salary_range": "$180,000 - $250,000",
+            "description": "Design enterprise-scale cloud solutions for Fortune 500 clients. Lead technical discussions and guide implementation teams.",
+            "required_skills": [
+                "AWS",
+                "Azure",
+                "Architecture Design",
+                "Cloud Migration",
+                "Security"
+            ],
+            "preferred_skills": [
+                "GCP",
+                "Kubernetes",
+                "Serverless",
+                "Cost Optimization",
+                "Multi-cloud"
+            ],
+            "responsibilities": [
+                "Design cloud architecture solutions",
+                "Lead technical discovery sessions",
+                "Create architecture documentation",
+                "Guide implementation teams",
+                "Ensure security and compliance"
+            ],
+            "benefits": [
+                "Remote work",
+                "High salary",
+                "Travel opportunities",
+                "Leadership role"
+            ],
+            "posted_date": "2024-01-09",
+            "url": "https://example.com/jobs/cloud-architect"
+        },
+        {
+            "id": "jp009",
+            "title": "Full Stack Developer",
+            "company": "Digital Agency",
+            "location": "Los Angeles, CA",
+            "type": "Full-time",
+            "experience_level": "Mid",
+            "salary_range": "$110,000 - $150,000",
+            "description": "Build end-to-end web applications for diverse clients. Work across the stack with modern technologies.",
+            "required_skills": [
+                "JavaScript",
+                "React",
+                "Node.js",
+                "PostgreSQL",
+                "Git"
+            ],
+            "preferred_skills": [
+                "TypeScript",
+                "Next.js",
+                "Docker",
+                "AWS",
+                "MongoDB"
+            ],
+            "responsibilities": [
+                "Develop full stack web applications",
+                "Work with clients to understand requirements",
+                "Deploy and maintain applications",
+                "Write technical documentation",
+                "Mentor junior developers"
+            ],
+            "benefits": [
+                "Creative projects",
+                "Health insurance",
+                "Flexible schedule"
+            ],
+            "posted_date": "2024-01-07",
+            "url": "https://example.com/jobs/fullstack-dev"
+        },
+        {
+            "id": "jp010",
+            "title": "Security Engineer",
+            "company": "CyberSecure",
+            "location": "Washington, DC",
+            "type": "Full-time",
+            "experience_level": "Senior",
+            "salary_range": "$150,000 - $200,000",
+            "description": "Protect our systems and data from security threats. Implement security controls and respond to incidents.",
+            "required_skills": [
+                "Security",
+                "Python",
+                "AWS Security",
+                "Penetration Testing",
+                "SIEM"
+            ],
+            "preferred_skills": [
+                "Kubernetes Security",
+                "Zero Trust",
+                "Compliance",
+                "Threat Modeling"
+            ],
+            "responsibilities": [
+                "Conduct security assessments",
+                "Implement security controls",
+                "Respond to security incidents",
+                "Train developers on secure coding",
+                "Manage vulnerability programs"
+            ],
+            "benefits": [
+                "Clearance support",
+                "Health insurance",
+                "Training budget"
+            ],
+            "posted_date": "2024-01-06",
+            "url": "https://example.com/jobs/security-engineer"
+        }
+    ]
+}

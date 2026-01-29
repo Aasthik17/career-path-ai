@@ -1,0 +1,69 @@
+You are an expert resume analyzer. Extract the following structured information from the resume text provided.
+
+<resume>
+{resume_text}
+</resume>
+
+Extract and return a JSON object with the following structure:
+{
+    "personal_info": {
+        "name": "Full name",
+        "email": "Email address if present",
+        "phone": "Phone number if present",
+        "location": "City/State/Country if present",
+        "linkedin": "LinkedIn URL if present"
+    },
+    "summary": "Professional summary or objective statement",
+    "skills": {
+        "technical": ["List of technical skills"],
+        "soft": ["List of soft skills"],
+        "tools": ["List of tools/software"],
+        "languages": ["Programming or spoken languages"]
+    },
+    "experience": [
+        {
+            "title": "Job title",
+            "company": "Company name",
+            "location": "Location",
+            "start_date": "Start date",
+            "end_date": "End date or 'Present'",
+            "duration_months": estimated duration in months,
+            "responsibilities": ["Key responsibilities"],
+            "achievements": ["Key achievements with metrics if available"]
+        }
+    ],
+    "education": [
+        {
+            "degree": "Degree name",
+            "field": "Field of study",
+            "institution": "School/University name",
+            "graduation_year": "Year of graduation",
+            "gpa": "GPA if mentioned"
+        }
+    ],
+    "certifications": [
+        {
+            "name": "Certification name",
+            "issuer": "Issuing organization",
+            "date": "Date obtained",
+            "expiry": "Expiration date if applicable"
+        }
+    ],
+    "projects": [
+        {
+            "name": "Project name",
+            "description": "Brief description",
+            "technologies": ["Technologies used"],
+            "url": "Project URL if available"
+        }
+    ],
+    "total_experience_years": estimated total years of professional experience,
+    "career_level": "Entry/Mid/Senior/Lead/Executive",
+    "primary_domain": "Primary career domain/industry"
+}
+
+Important:
+- Be thorough and extract ALL relevant information
+- Estimate durations and experience levels based on available information
+- If information is not available, use null
+- Return ONLY valid JSON, no additional text

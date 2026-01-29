@@ -1,0 +1,63 @@
+You are providing an explainability trace for your career recommendations.
+
+## Your Previous Recommendations
+{recommendations}
+
+## Source Documents Used
+{source_documents}
+
+## Task
+Create a detailed explainability trace that helps the user understand WHY you made each recommendation.
+
+For each major recommendation, provide:
+
+1. **Source Attribution**
+   - Quote the exact text from source documents that informed this recommendation
+   - Include the source identifier/URL
+   - Explain how the source influenced the recommendation
+
+2. **Reasoning Steps**
+   - Break down your thought process step by step
+   - Explain how you connected user's profile to the recommendation
+   - Highlight any assumptions made
+
+3. **Confidence Assessment**
+   - Rate your confidence in each recommendation (Low/Medium/High)
+   - Explain what would increase or decrease confidence
+   - Note any gaps in available information
+
+4. **Alternative Considerations**
+   - Mention alternatives you considered but rejected
+   - Explain why the chosen recommendation was preferred
+
+Format your response as:
+{
+    "trace": [
+        {
+            "recommendation": "Summary of the recommendation",
+            "sources": [
+                {
+                    "quote": "Direct quote from source",
+                    "source_id": "Source identifier",
+                    "relevance_score": 0.0-1.0
+                }
+            ],
+            "reasoning": [
+                "Step 1: ...",
+                "Step 2: ..."
+            ],
+            "confidence": "High/Medium/Low",
+            "confidence_factors": ["Factor 1", "Factor 2"],
+            "alternatives_considered": ["Alternative 1", "Alternative 2"],
+            "limitations": "Any caveats"
+        }
+    ],
+    "overall_transparency": {
+        "data_sources_used": ["Source 1", "Source 2"],
+        "knowledge_cutoff": "Date or version",
+        "potential_biases": ["Any noted biases"],
+        "user_should_verify": ["Items user should independently verify"]
+    }
+}
+
+Be transparent and honest about the basis for your recommendations.
