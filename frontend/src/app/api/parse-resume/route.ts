@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
+import { invokeGenerationModel, isBedrockAvailable, MODELS } from '@/lib/bedrock';
 
 /**
- * Resume Parser API - Local Mode
- * Simulates the Lambda function behavior for local development
+ * Resume Parser API
+ * Uses Amazon Bedrock (Nova Pro) for intelligent resume parsing
+ * Falls back to local parsing if Bedrock is not available
  */
 
 export async function POST(request: Request) {
@@ -17,149 +19,255 @@ export async function POST(request: Request) {
             );
         }
 
-        // Simulate processing delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // Check if Bedrock is available
+        const bedrockAvailable = await isBedrockAvailable();
 
-        // Parse the resume locally
-        const parsedResume = parseResumeLocally(resume_text);
+        let parsedResume;
+        let mode: 'bedrock' | 'local';
+
+        if (bedrockAvailable) {
+            // Use Amazon Bedrock for AI-powered parsing
+            parsedResume = await parseResumeWithBedrock(resume_text);
+            mode = 'bedrock';
+        } else {
+            // Fallback to local parsing
+            console.log('Bedrock not available, using local parsing');
+            parsedResume = parseResumeLocally(resume_text);
+            mode = 'local';
+        }
 
         return NextResponse.json({
             resumeText: resume_text,
             parsedResume,
-            mode: 'local'
+            mode
         });
     } catch (error) {
         console.error('Parse resume error:', error);
-        return NextResponse.json(
-            { error: 'Failed to parse resume' },
-            { status: 500 }
-        );
+        // Fallback to local on any error
+        try {
+            const body = await request.clone().json();
+            const parsedResume = parseResumeLocally(body.resume_text || '');
+            return NextResponse.json({
+                resumeText: body.resume_text,
+                parsedResume,
+                mode: 'local'
+            });
+        } catch {
+            return NextResponse.json(
+                { error: 'Failed to parse resume' },
+                { status: 500 }
+            );
+        }
     }
 }
 
-interface ParsedResume {
-    personal_info: {
-        name: string;
-        email: string | null;
-        phone: string | null;
-        location: string;
-        linkedin: string | null;
-    };
-    summary: string;
-    skills: {
-        technical: string[];
-        soft: string[];
-        tools: string[];
-        languages: string[];
-    };
-    experience: Array<{
-        title: string;
-        company: string;
-        location: string;
-        start_date: string;
-        end_date: string;
-        duration_months: number;
-        responsibilities: string[];
-        achievements: string[];
-    }>;
-    education: Array<{
-        degree: string;
-        field: string;
-        institution: string;
-        graduation_year: string;
-        gpa: string | null;
-    }>;
-    certifications: Array<{
-        name: string;
-        issuer: string;
-        date: string;
-        expiry: string | null;
-    }>;
-    projects: Array<{
-        name: string;
-        description: string;
-        technologies: string[];
-        url: string | null;
-    }>;
-    total_experience_years: number;
-    career_level: string;
-    primary_domain: string;
+/**
+ * Parse resume using Amazon Bedrock Nova Pro
+ */
+async function parseResumeWithBedrock(resumeText: string) {
+    const prompt = `You are an expert resume parser and ATS (Applicant Tracking System) analyst. Your task is to carefully read the resume below and extract REAL, ACTUAL information from it, and also calculate an ATS compatibility score.
+
+CRITICAL INSTRUCTIONS:
+1. Extract the ACTUAL name, email, skills, etc. from the resume text - DO NOT use placeholder text
+2. If information is not found, use null for optional fields or empty arrays for lists
+3. For skills, list ONLY the skills that are ACTUALLY mentioned in the resume
+4. Calculate total_experience_years by looking at the work history dates
+5. Calculate ats_score based on: keyword density, formatting clarity, section organization, quantified achievements, and skill relevance
+6. Return ONLY valid JSON with no markdown formatting, no code blocks, no explanations
+
+<resume>
+${resumeText}
+</resume>
+
+Analyze the resume above and return a JSON object with this EXACT structure, filled with ACTUAL DATA extracted from the resume:
+
+{
+  "personal_info": {
+    "name": "<extract the person's actual full name from the resume>",
+    "email": "<extract email if found, otherwise null>",
+    "phone": "<extract phone if found, otherwise null>",
+    "location": "<extract city/location if found, otherwise null>",
+    "linkedin": "<extract LinkedIn URL if found, otherwise null>"
+  },
+  "summary": "<write a 1-2 sentence professional summary based on their experience>",
+  "skills": {
+    "technical": ["<list actual programming languages, frameworks, databases mentioned>"],
+    "soft": ["<list actual soft skills like leadership, communication if mentioned>"],
+    "tools": ["<list actual tools like Git, Docker, AWS services mentioned>"],
+    "languages": ["<list spoken/programming languages mentioned>"]
+  },
+  "experience": [
+    {
+      "title": "<actual job title>",
+      "company": "<actual company name>",
+      "location": "<job location or null>",
+      "start_date": "<YYYY-MM format>",
+      "end_date": "<YYYY-MM or Present>",
+      "duration_months": <calculate as number>,
+      "responsibilities": ["<actual responsibilities from resume>"],
+      "achievements": ["<actual achievements from resume>"]
+    }
+  ],
+  "education": [
+    {
+      "degree": "<actual degree like Bachelor of Science>",
+      "field": "<actual field like Computer Science>",
+      "institution": "<actual school name>",
+      "graduation_year": "<actual year>",
+      "gpa": "<GPA if mentioned, otherwise null>"
+    }
+  ],
+  "certifications": [
+    {
+      "name": "<actual certification name>",
+      "issuer": "<issuing organization>",
+      "date": "<date if known>",
+      "expiry": "<expiry if known, otherwise null>"
+    }
+  ],
+  "projects": [],
+  "total_experience_years": <calculate total years as a NUMBER based on work history>,
+  "career_level": "<determine: Entry if <2 years, Mid if 2-5 years, Senior if 5-8 years, Staff if 8+ years>",
+  "primary_domain": "<determine main expertise area like 'Full Stack Development' or 'Data Science'>",
+  "ats_score": {
+    "overall": <calculate a score from 0-100 based on ATS compatibility>,
+    "breakdown": {
+      "keywords": <0-100 score for industry keyword presence>,
+      "formatting": <0-100 score for clean, parseable formatting>,
+      "experience": <0-100 score for work experience quality and quantified achievements>,
+      "skills": <0-100 score for relevant skills match>,
+      "education": <0-100 score for education and certifications>
+    },
+    "suggestions": ["<1-3 specific suggestions to improve ATS score>"]
+  }
 }
 
-function parseResumeLocally(text: string): ParsedResume {
-    const textLower = text.toLowerCase();
+IMPORTANT: Return ONLY the JSON. No other text. Extract REAL data from the resume, not placeholder descriptions.`;
 
-    // Extract name (first non-empty line that looks like a name)
+    try {
+        const response = await invokeGenerationModel(
+            prompt,
+            MODELS.generation.NOVA_PRO,
+            { temperature: 0.1, maxTokens: 4096 }  // Lower temperature for more accurate extraction
+        );
+
+        console.log('Bedrock raw response:', response.substring(0, 500));
+
+        // Parse the JSON response - try multiple extraction methods
+        let jsonStr = response;
+
+        // Remove markdown code blocks if present
+        jsonStr = jsonStr.replace(/```json\s*/gi, '').replace(/```\s*/gi, '');
+
+        // Try to find JSON object
+        const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]);
+
+            // Validate the parsed result - check for placeholder text
+            if (isValidParsedResume(parsed)) {
+                return parsed;
+            } else {
+                console.warn('Bedrock returned placeholder text, falling back to local');
+                return parseResumeLocally(resumeText);
+            }
+        }
+
+        console.warn('Failed to parse Bedrock response as JSON, falling back to local');
+        return parseResumeLocally(resumeText);
+    } catch (error) {
+        console.error('Bedrock parsing failed:', error);
+        return parseResumeLocally(resumeText);
+    }
+}
+
+/**
+ * Validate that the parsed resume has real data, not placeholder text
+ */
+function isValidParsedResume(parsed: Record<string, unknown>): boolean {
+    const personalInfo = parsed.personal_info as Record<string, unknown> | undefined;
+    const skills = parsed.skills as Record<string, unknown[]> | undefined;
+
+    // Check for common placeholder patterns
+    const placeholders = [
+        'full name', 'actual name', 'extract', '<', '>',
+        'list of', 'programming languages', 'actual skills',
+        'placeholder', 'example'
+    ];
+
+    const name = String(personalInfo?.name || '').toLowerCase();
+    const techSkills = skills?.technical || [];
+
+    // Name shouldn't contain placeholder text
+    if (placeholders.some(p => name.includes(p))) {
+        return false;
+    }
+
+    // Skills should be actual skill names, not descriptions
+    if (techSkills.length > 0) {
+        const firstSkill = String(techSkills[0]).toLowerCase();
+        if (placeholders.some(p => firstSkill.includes(p)) || firstSkill.length > 50) {
+            return false;
+        }
+    }
+
+    // Experience years should be a valid number
+    const expYears = parsed.total_experience_years;
+    if (typeof expYears !== 'number' || isNaN(expYears)) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Local resume parsing (fallback)
+ */
+function parseResumeLocally(text: string) {
     const lines = text.split('\n').filter(l => l.trim());
+
+    // Extract basic info
     const name = extractName(lines);
-
-    // Extract email
     const emailMatch = text.match(/[\w.-]+@[\w.-]+\.\w+/);
-    const email = emailMatch ? emailMatch[0] : null;
-
-    // Extract phone
     const phoneMatch = text.match(/\+?[\d\s()-]{10,}/);
-    const phone = phoneMatch ? phoneMatch[0].trim() : null;
-
-    // Extract location
-    const location = extractLocation(text) || "Not specified";
-
-    // Extract LinkedIn
     const linkedinMatch = text.match(/linkedin\.com\/in\/[\w-]+/i);
-    const linkedin = linkedinMatch ? `https://${linkedinMatch[0]}` : null;
 
     // Extract skills
     const skills = extractSkills(text);
 
-    // Extract experience
-    const experience = extractExperience(text);
-
-    // Extract education
-    const education = extractEducation(text);
-
-    // Extract certifications
-    const certifications = extractCertifications(text);
-
-    // Calculate total experience
-    const totalYears = experience.reduce((sum, exp) => sum + exp.duration_months, 0) / 12;
+    // Calculate experience
+    const experienceYears = estimateExperience(text);
 
     // Determine career level
     let careerLevel = 'Entry';
-    if (totalYears >= 8) careerLevel = 'Staff/Principal';
-    else if (totalYears >= 5) careerLevel = 'Senior';
-    else if (totalYears >= 2) careerLevel = 'Mid';
+    if (experienceYears >= 8) careerLevel = 'Staff/Principal';
+    else if (experienceYears >= 5) careerLevel = 'Senior';
+    else if (experienceYears >= 2) careerLevel = 'Mid';
 
-    // Determine primary domain
-    const domain = determineDomain(skills.technical, textLower);
-
-    // Extract summary
-    const summary = extractSummary(text) ||
-        `${careerLevel} professional with experience in ${domain}`;
+    const domain = determineDomain(skills.technical, text.toLowerCase());
 
     return {
         personal_info: {
             name,
-            email,
-            phone,
-            location,
-            linkedin
+            email: emailMatch ? emailMatch[0] : null,
+            phone: phoneMatch ? phoneMatch[0].trim() : null,
+            location: extractLocation(text),
+            linkedin: linkedinMatch ? `https://${linkedinMatch[0]}` : null
         },
-        summary,
+        summary: extractSummary(text) || `${careerLevel} professional in ${domain}`,
         skills,
-        experience,
-        education,
-        certifications,
+        experience: extractExperience(text),
+        education: extractEducation(text),
+        certifications: extractCertifications(text),
         projects: [],
-        total_experience_years: Math.round(totalYears * 10) / 10,
+        total_experience_years: experienceYears,
         career_level: careerLevel,
         primary_domain: domain
     };
 }
 
 function extractName(lines: string[]): string {
-    // First line is often the name
     const firstLine = lines[0]?.trim() || '';
-    // Check if it looks like a name (2-4 words, no special chars except spaces)
     if (/^[A-Za-z\s]{2,50}$/.test(firstLine) && firstLine.split(' ').length <= 4) {
         return firstLine;
     }
@@ -167,70 +275,56 @@ function extractName(lines: string[]): string {
 }
 
 function extractLocation(text: string): string | null {
-    const locationPatterns = [
-        /(?:located?\s+in|based\s+in|from)\s+([A-Za-z\s,]+)/i,
-        /([A-Za-z]+,\s*[A-Z]{2})/,
-        /(San Francisco|New York|Los Angeles|Seattle|Austin|Boston|Chicago|Denver|Atlanta|Portland)/i
+    const patterns = [
+        /([A-Za-z\s]+,\s*[A-Z]{2})/,
+        /(San Francisco|New York|Los Angeles|Seattle|Austin|Boston|Chicago|Denver|Atlanta)/i
     ];
-
-    for (const pattern of locationPatterns) {
+    for (const pattern of patterns) {
         const match = text.match(pattern);
         if (match) return match[1].trim();
     }
     return null;
 }
 
-function extractSkills(text: string): { technical: string[]; soft: string[]; tools: string[]; languages: string[] } {
+function extractSkills(text: string) {
     const techKeywords = [
-        'Python', 'JavaScript', 'TypeScript', 'Java', 'Go', 'Rust', 'C++', 'C#', 'Ruby', 'PHP', 'Swift', 'Kotlin',
-        'React', 'Vue', 'Angular', 'Next.js', 'Node.js', 'Express', 'Django', 'Flask', 'FastAPI', 'Spring',
-        'AWS', 'Azure', 'GCP', 'Kubernetes', 'Docker', 'Terraform', 'CloudFormation',
-        'PostgreSQL', 'MongoDB', 'Redis', 'MySQL', 'SQL', 'DynamoDB', 'Elasticsearch',
-        'Machine Learning', 'AI', 'Deep Learning', 'TensorFlow', 'PyTorch', 'NLP', 'Computer Vision',
-        'REST', 'GraphQL', 'gRPC', 'Microservices', 'API Design',
-        'CI/CD', 'DevOps', 'Agile', 'Scrum', 'Git', 'Linux'
+        'Python', 'JavaScript', 'TypeScript', 'Java', 'Go', 'Rust', 'C++', 'C#', 'Ruby', 'PHP',
+        'React', 'Vue', 'Angular', 'Next.js', 'Node.js', 'Express', 'Django', 'Flask', 'FastAPI',
+        'AWS', 'Azure', 'GCP', 'Kubernetes', 'Docker', 'Terraform',
+        'PostgreSQL', 'MongoDB', 'Redis', 'MySQL', 'SQL', 'DynamoDB',
+        'Machine Learning', 'AI', 'Deep Learning', 'TensorFlow', 'PyTorch',
+        'REST', 'GraphQL', 'Microservices', 'CI/CD', 'DevOps', 'Git'
     ];
 
     const softSkills = [
-        'Leadership', 'Communication', 'Problem Solving', 'Teamwork', 'Critical Thinking',
-        'Project Management', 'Time Management', 'Mentoring', 'Collaboration', 'Adaptability'
-    ];
-
-    const tools = [
-        'Git', 'GitHub', 'GitLab', 'Jira', 'Confluence', 'Slack', 'VS Code', 'IntelliJ',
-        'Jenkins', 'CircleCI', 'GitHub Actions', 'Datadog', 'Splunk', 'New Relic'
+        'Leadership', 'Communication', 'Problem Solving', 'Teamwork',
+        'Project Management', 'Mentoring'
     ];
 
     const textLower = text.toLowerCase();
 
     return {
-        technical: techKeywords.filter(skill => textLower.includes(skill.toLowerCase())),
-        soft: softSkills.filter(skill => textLower.includes(skill.toLowerCase())),
-        tools: tools.filter(tool => textLower.includes(tool.toLowerCase())),
-        languages: ['English'] // Default
+        technical: techKeywords.filter(s => textLower.includes(s.toLowerCase())),
+        soft: softSkills.filter(s => textLower.includes(s.toLowerCase())),
+        tools: ['Git', 'VS Code'].filter(t => textLower.includes(t.toLowerCase())),
+        languages: ['English']
     };
 }
 
-function extractExperience(text: string): ParsedResume['experience'] {
-    const experiences: ParsedResume['experience'] = [];
+function estimateExperience(text: string): number {
+    const yearRanges = text.match(/20\d{2}/g) || [];
+    if (yearRanges.length >= 2) {
+        const years = yearRanges.map(y => parseInt(y)).sort();
+        return Math.min(new Date().getFullYear() - years[0], 20);
+    }
+    return 3;
+}
 
-    // Look for common patterns
-    const expPatterns = [
-        /(?:senior\s+)?(?:software\s+)?engineer(?:ing)?/gi,
-        /developer/gi,
-        /manager/gi,
-        /lead/gi,
-        /architect/gi
-    ];
-
-    // Simple extraction - in real implementation would be more sophisticated
-    const hasExp = expPatterns.some(p => p.test(text));
-
+function extractExperience(text: string) {
+    // Basic extraction
+    const hasExp = /engineer|developer|manager|lead/i.test(text);
     if (hasExp) {
-        // Extract year ranges
-        const yearRanges = text.match(/20\d{2}\s*[-–]\s*(?:20\d{2}|Present|Current)/gi) || [];
-
-        experiences.push({
+        return [{
             title: "Software Engineer",
             company: "Company",
             location: "Location",
@@ -238,95 +332,58 @@ function extractExperience(text: string): ParsedResume['experience'] {
             end_date: "Present",
             duration_months: 36,
             responsibilities: ["Developed software applications"],
-            achievements: ["Delivered projects on time"]
-        });
+            achievements: ["Delivered projects successfully"]
+        }];
     }
-
-    return experiences;
+    return [];
 }
 
-function extractEducation(text: string): ParsedResume['education'] {
-    const education: ParsedResume['education'] = [];
-    const textLower = text.toLowerCase();
-
-    const degrees = ['B.S.', 'B.A.', 'M.S.', 'M.A.', 'Ph.D.', 'Bachelor', 'Master', 'MBA'];
-    const fields = ['Computer Science', 'Computer Engineering', 'Software Engineering',
-        'Information Technology', 'Data Science', 'Mathematics', 'Physics'];
-
-    const hasDegree = degrees.some(d => textLower.includes(d.toLowerCase()));
-    const field = fields.find(f => textLower.includes(f.toLowerCase())) || 'Computer Science';
-
+function extractEducation(text: string) {
+    const hasDegree = /B\.S\.|B\.A\.|M\.S\.|M\.A\.|Ph\.D\.|Bachelor|Master|MBA/i.test(text);
     if (hasDegree) {
-        education.push({
+        return [{
             degree: "Bachelor's Degree",
-            field,
+            field: "Computer Science",
             institution: "University",
             graduation_year: "2020",
             gpa: null
-        });
+        }];
     }
-
-    return education;
+    return [];
 }
 
-function extractCertifications(text: string): ParsedResume['certifications'] {
-    const certs: ParsedResume['certifications'] = [];
-    const textLower = text.toLowerCase();
-
+function extractCertifications(text: string) {
+    const certs = [];
     const certKeywords = [
         { name: 'AWS Solutions Architect', issuer: 'Amazon' },
         { name: 'AWS Developer', issuer: 'Amazon' },
-        { name: 'AWS Cloud Practitioner', issuer: 'Amazon' },
-        { name: 'Google Cloud Professional', issuer: 'Google' },
-        { name: 'Azure Administrator', issuer: 'Microsoft' },
         { name: 'Kubernetes Administrator', issuer: 'CNCF' },
-        { name: 'PMP', issuer: 'PMI' }
     ];
 
+    const textLower = text.toLowerCase();
     for (const cert of certKeywords) {
         if (textLower.includes(cert.name.toLowerCase())) {
-            certs.push({
-                name: cert.name,
-                issuer: cert.issuer,
-                date: "2023",
-                expiry: null
-            });
+            certs.push({ ...cert, date: "2023", expiry: null });
         }
     }
-
     return certs;
 }
 
 function extractSummary(text: string): string | null {
-    const summaryPatterns = [
-        /summary\s*:?\s*\n?([^\n]{50,300})/i,
-        /professional\s+summary\s*:?\s*\n?([^\n]{50,300})/i,
-        /about\s*:?\s*\n?([^\n]{50,300})/i
-    ];
-
-    for (const pattern of summaryPatterns) {
-        const match = text.match(pattern);
-        if (match) return match[1].trim();
-    }
-    return null;
+    const match = text.match(/summary\s*:?\s*\n?([^\n]{50,300})/i);
+    return match ? match[1].trim() : null;
 }
 
 function determineDomain(skills: string[], textLower: string): string {
-    if (skills.some(s => ['Machine Learning', 'AI', 'Deep Learning', 'TensorFlow', 'PyTorch'].includes(s))) {
+    if (skills.some(s => ['Machine Learning', 'AI', 'Deep Learning'].includes(s))) {
         return 'Machine Learning / AI';
     }
-    if (skills.some(s => ['React', 'Vue', 'Angular', 'Next.js'].includes(s)) &&
+    if (skills.some(s => ['React', 'Vue', 'Angular'].includes(s)) &&
         skills.some(s => ['Node.js', 'Python', 'Java'].includes(s))) {
         return 'Full Stack Development';
     }
-    if (skills.some(s => ['AWS', 'Azure', 'GCP', 'Kubernetes', 'Terraform'].includes(s))) {
+    if (skills.some(s => ['AWS', 'Azure', 'GCP', 'Kubernetes'].includes(s))) {
         return 'Cloud / DevOps';
-    }
-    if (skills.some(s => ['React', 'Vue', 'Angular'].includes(s))) {
-        return 'Frontend Development';
-    }
-    if (skills.some(s => ['Node.js', 'Python', 'Java', 'Go'].includes(s))) {
-        return 'Backend Development';
     }
     return 'Software Engineering';
 }

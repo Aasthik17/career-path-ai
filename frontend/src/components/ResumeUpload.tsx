@@ -19,60 +19,87 @@ export default function ResumeUpload({ onUploadComplete }: ResumeUploadProps) {
         setError('');
 
         try {
-            // Read file content
-            const reader = new FileReader();
-
-            reader.onload = async (e) => {
-                const content = e.target?.result as string;
-                setUploadStatus('parsing');
-
-                // In demo mode, simulate parsing
-                // In production, this would call the actual API
-                try {
-                    // Simulated API call - replace with actual endpoint
-                    const response = await fetch('/api/parse-resume', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            resume_text: content,
-                            file_name: file.name
-                        }),
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        setUploadStatus('complete');
-                        onUploadComplete(data);
-                    } else {
-                        // Demo fallback
-                        setUploadStatus('complete');
-                        onUploadComplete({
-                            resumeText: content,
-                            parsedResume: getDemoResumeData()
-                        });
-                    }
-                } catch {
-                    // Demo mode fallback
-                    setUploadStatus('complete');
-                    onUploadComplete({
-                        resumeText: content,
-                        parsedResume: getDemoResumeData()
-                    });
-                }
-            };
-
-            reader.onerror = () => {
-                setError('Failed to read file');
-                setUploadStatus('error');
-            };
+            let content = '';
 
             if (file.type === 'application/pdf') {
-                // For PDF, we'll send the base64 content
-                reader.readAsDataURL(file);
+                // Use server-side PDF parsing
+                console.log('Parsing PDF on server...');
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const pdfResponse = await fetch('/api/parse-pdf', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (pdfResponse.ok) {
+                        const pdfData = await pdfResponse.json();
+                        content = pdfData.text || '';
+                        console.log('PDF text extracted, length:', content.length);
+                        console.log('PDF text preview:', content.substring(0, 300));
+                    } else {
+                        console.error('PDF parsing failed:', await pdfResponse.text());
+                        setError('Failed to parse PDF. Please try a .txt file.');
+                        setUploadStatus('error');
+                        return;
+                    }
+                } catch (pdfErr) {
+                    console.error('PDF parsing error:', pdfErr);
+                    setError('Failed to parse PDF. Please try a .txt file.');
+                    setUploadStatus('error');
+                    return;
+                }
             } else {
-                reader.readAsText(file);
+                // For text files, read directly
+                content = await file.text();
+            }
+
+            if (!content || content.trim().length < 50) {
+                setError('Could not extract enough text from file. Please try a different format.');
+                setUploadStatus('error');
+                return;
+            }
+
+            setUploadStatus('parsing');
+            console.log('Sending to parse API, content length:', content.length);
+
+            try {
+                const response = await fetch('/api/parse-resume', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        resume_text: content,
+                        file_name: file.name
+                    }),
+                });
+
+                const data = await response.json();
+                console.log('API Response:', data);
+
+                if (response.ok && data.parsedResume) {
+                    setUploadStatus('complete');
+                    onUploadComplete(data);
+                } else {
+                    console.log('API failed or no parsedResume, using demo data');
+                    setUploadStatus('complete');
+                    const demoData = getDemoResumeData();
+                    onUploadComplete({
+                        resumeText: content,
+                        parsedResume: demoData
+                    });
+                }
+            } catch (err) {
+                console.error('API call failed:', err);
+                setUploadStatus('complete');
+                const demoData = getDemoResumeData();
+                onUploadComplete({
+                    resumeText: content,
+                    parsedResume: demoData
+                });
             }
         } catch (err) {
+            console.error('File processing error:', err);
             setError(err instanceof Error ? err.message : 'Upload failed');
             setUploadStatus('error');
         }

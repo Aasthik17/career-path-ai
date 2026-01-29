@@ -48,6 +48,18 @@ export interface Project {
     url: string | null;
 }
 
+export interface ATSScore {
+    overall: number;
+    breakdown: {
+        keywords: number;
+        formatting: number;
+        experience: number;
+        skills: number;
+        education: number;
+    };
+    suggestions: string[];
+}
+
 export interface ParsedResume {
     personal_info: PersonalInfo;
     summary: string;
@@ -59,6 +71,7 @@ export interface ParsedResume {
     total_experience_years: number;
     career_level: 'Entry' | 'Mid' | 'Senior' | 'Lead' | 'Executive';
     primary_domain: string;
+    ats_score?: ATSScore;
 }
 
 export interface CareerPath {

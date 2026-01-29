@@ -199,7 +199,7 @@ export default function SkillGapChart({ userSkills = [], targetRole = 'Senior So
                                     {idx + 1}. {skill.skill}
                                 </span>
                                 <span className="text-xs px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400">
-                                    +{skill.gap}pts
+                                    +{Math.round(skill.gap)}pts
                                 </span>
                             </div>
                         ))}

@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
+import { invokeGenerationModel, isBedrockAvailable, MODELS } from '@/lib/bedrock';
 
 /**
- * Chat API - Local Mode
- * Simulates the Agent Orchestrator Lambda for local development
- * Provides intelligent career guidance responses based on context
+ * Chat API - Career AI Mentor
+ * Uses Amazon Bedrock (Nova Pro) for intelligent career guidance
+ * Falls back to smart local responses if Bedrock is not available
  */
 
 interface UserProfile {
@@ -13,6 +14,9 @@ interface UserProfile {
     primary_domain?: string;
     total_experience_years?: number;
     certifications?: Array<{ name: string }>;
+    summary?: string;
+    experience?: Array<{ title?: string; company?: string }>;
+    education?: Array<{ degree?: string; field?: string }>;
 }
 
 interface ChatMessage {
@@ -32,415 +36,343 @@ export async function POST(request: Request) {
             );
         }
 
-        // Simulate AI processing delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Check if Bedrock is available
+        const bedrockAvailable = await isBedrockAvailable();
 
-        // Generate intelligent response based on intent
-        const response = generateSmartResponse(message, user_profile, conversation_history);
+        let response;
+        let mode: 'bedrock' | 'local';
+
+        if (bedrockAvailable && user_profile) {
+            // Use Amazon Bedrock for AI-powered responses
+            response = await generateBedrockResponse(message, user_profile, conversation_history);
+            mode = 'bedrock';
+        } else {
+            // Fallback to smart local responses
+            console.log('Using local response generation');
+            response = generateLocalResponse(message, user_profile);
+            mode = 'local';
+        }
 
         return NextResponse.json({
             ...response,
-            mode: 'local'
+            mode
         });
     } catch (error) {
         console.error('Chat error:', error);
-        return NextResponse.json(
-            { error: 'Chat failed' },
-            { status: 500 }
-        );
+        // Fallback to local on any error
+        try {
+            const body = await request.clone().json();
+            const response = generateLocalResponse(body.message || '', body.user_profile);
+            return NextResponse.json({ ...response, mode: 'local' });
+        } catch {
+            return NextResponse.json(
+                { error: 'Chat failed' },
+                { status: 500 }
+            );
+        }
     }
 }
 
-function generateSmartResponse(
+/**
+ * Generate response using Amazon Bedrock Nova Pro
+ */
+async function generateBedrockResponse(
     message: string,
-    profile?: UserProfile,
+    profile: UserProfile,
     history?: ChatMessage[]
 ) {
+    // Build context from user profile
+    const profileContext = buildProfileContext(profile);
+    const conversationContext = history?.slice(-5).map(m =>
+        `${m.role.toUpperCase()}: ${m.content}`
+    ).join('\n') || '';
+
+    const systemPrompt = `You are CareerPath AI, an expert career mentor powered by Amazon Bedrock. 
+You provide personalized career guidance based on the user's actual resume and profile.
+
+USER PROFILE:
+${profileContext}
+
+INSTRUCTIONS:
+1. Provide specific, actionable advice based on the user's actual skills and experience
+2. Reference their specific skills, certifications, and experience when giving advice
+3. Be encouraging but honest about skill gaps
+4. Format responses in markdown with headers, bullet points, and emphasis
+5. Include specific recommendations for their career level (${profile.career_level || 'Mid'})
+6. When suggesting jobs, base matches on their actual skills
+7. When creating roadmaps, tailor to their specific gaps
+
+${conversationContext ? `RECENT CONVERSATION:\n${conversationContext}\n` : ''}`;
+
+    const prompt = `${systemPrompt}
+
+USER MESSAGE: ${message}
+
+Provide a helpful, personalized response. Use markdown formatting with headers (##), bullet points, and **bold** for emphasis.`;
+
+    try {
+        const responseText = await invokeGenerationModel(
+            prompt,
+            MODELS.generation.NOVA_PRO,
+            { temperature: 0.7, maxTokens: 4096 }
+        );
+
+        return {
+            response: responseText || generateLocalResponse(message, profile).response,
+            type: 'text',
+            sources: [
+                { content: 'User profile analysis', source: 'uploaded_resume' },
+                { content: 'Career data', source: 'knowledge_base' }
+            ]
+        };
+    } catch (error) {
+        console.error('Bedrock response failed:', error);
+        return generateLocalResponse(message, profile);
+    }
+}
+
+/**
+ * Build profile context string from user profile
+ */
+function buildProfileContext(profile: UserProfile): string {
+    const parts: string[] = [];
+
+    if (profile.personal_info?.name) {
+        parts.push(`Name: ${profile.personal_info.name}`);
+    }
+
+    if (profile.career_level) {
+        parts.push(`Career Level: ${profile.career_level}`);
+    }
+
+    if (profile.primary_domain) {
+        parts.push(`Primary Domain: ${profile.primary_domain}`);
+    }
+
+    if (profile.total_experience_years) {
+        parts.push(`Total Experience: ${profile.total_experience_years} years`);
+    }
+
+    if (profile.summary) {
+        parts.push(`Summary: ${profile.summary}`);
+    }
+
+    if (profile.skills?.technical?.length) {
+        parts.push(`Technical Skills: ${profile.skills.technical.join(', ')}`);
+    }
+
+    if (profile.skills?.soft?.length) {
+        parts.push(`Soft Skills: ${profile.skills.soft.join(', ')}`);
+    }
+
+    if (profile.certifications?.length) {
+        parts.push(`Certifications: ${profile.certifications.map(c => c.name).join(', ')}`);
+    }
+
+    if (profile.experience?.length) {
+        const expStr = profile.experience.map(e =>
+            `${e.title || 'Role'} at ${e.company || 'Company'}`
+        ).join('; ');
+        parts.push(`Experience: ${expStr}`);
+    }
+
+    if (profile.education?.length) {
+        const eduStr = profile.education.map(e =>
+            `${e.degree || 'Degree'} in ${e.field || 'Field'}`
+        ).join('; ');
+        parts.push(`Education: ${eduStr}`);
+    }
+
+    return parts.join('\n');
+}
+
+/**
+ * Local response generation (fallback)
+ */
+function generateLocalResponse(message: string, profile?: UserProfile) {
     const inputLower = message.toLowerCase();
-    const skills = profile?.skills?.technical || ['Python', 'JavaScript'];
+    const skills = profile?.skills?.technical || [];
     const name = profile?.personal_info?.name || 'there';
     const careerLevel = profile?.career_level || 'Mid';
     const domain = profile?.primary_domain || 'Software Engineering';
     const experience = profile?.total_experience_years || 3;
+    const certs = profile?.certifications || [];
 
-    // Intent detection and response generation
-
-    // 1. Career Roadmap Request
+    // Career Roadmap
     if (inputLower.includes('roadmap') || inputLower.includes('plan') || inputLower.includes('path')) {
         return {
             response: `## 🗺️ Your Personalized 12-Week Career Roadmap
 
-Hey ${name}! Based on your profile as a **${careerLevel} ${domain}** professional with ${experience} years of experience, here's your customized growth plan:
+Hey ${name}! Based on your profile as a **${careerLevel} ${domain}** professional with ${experience} years of experience and skills in **${skills.slice(0, 3).join(', ')}**, here's your customized growth plan:
 
 ### 📊 Current Assessment
 - **Career Level:** ${careerLevel}
-- **Primary Skills:** ${skills.slice(0, 4).join(', ')}
+- **Primary Skills:** ${skills.slice(0, 5).join(', ') || 'General programming'}
 - **Experience:** ${experience} years
+${certs.length ? `- **Certifications:** ${certs.map(c => c.name).join(', ')}` : ''}
 
 ---
 
 ### 🎯 Weeks 1-4: Foundation Strengthening
-
-**Week 1-2: System Design Mastery**
-- Complete "Grokking System Design" course
-- Design a URL shortener system end-to-end
-- Practice explaining designs (15 min daily)
-
-**Week 3-4: Cloud Deep Dive**
-- ${skills.includes('AWS') ? 'Advance to AWS Solutions Architect Pro' : 'Start AWS Solutions Architect Associate'}
-- Build a serverless application
-- Set up monitoring with CloudWatch
-
----
+${getWeek1to4Recommendations(skills, careerLevel)}
 
 ### 🚀 Weeks 5-8: Skill Expansion
+${getWeek5to8Recommendations(skills, careerLevel)}
 
-**Week 5-6: DevOps & Infrastructure**
-- Master Kubernetes fundamentals
-- Set up CI/CD with GitHub Actions
-- Deploy with Infrastructure as Code
-
-**Week 7-8: Leadership Skills**
-- Lead a technical design review
-- Mentor a junior team member
-- Write 2 technical blog posts
-
----
-
-### 🏆 Weeks 9-12: Portfolio & Job Prep
-
-**Week 9-10: Portfolio Project**
-- Build a full-stack project showcasing new skills
-- Include system design, cloud deployment, monitoring
-
-**Week 11-12: Interview Prep**
-- Mock interviews (system design + coding)
-- Update resume with new achievements
-- Apply to target companies
-
----
+### 🏆 Weeks 9-12: Portfolio & Visibility
+${getWeek9to12Recommendations(skills)}
 
 Would you like me to dive deeper into any specific week?`,
             type: 'text',
             sources: [
-                { content: 'Career progression data for ' + domain, source: 'skills_taxonomy.json' },
-                { content: 'Learning resources and certifications', source: 'learning_resources.json' }
+                { content: 'Career data for ' + domain, source: 'skills_taxonomy.json' },
+                { content: 'Learning resources', source: 'learning_resources.json' }
             ]
         };
     }
 
-    // 2. Job Matching Request
+    // Job Matching
     if (inputLower.includes('job') || inputLower.includes('match') || inputLower.includes('opportunit')) {
-        const matchScore1 = Math.min(95, 75 + skills.length * 2);
-        const matchScore2 = matchScore1 - 8;
-        const matchScore3 = matchScore2 - 10;
-
+        const matchScore1 = Math.min(95, 70 + skills.length * 3);
         return {
-            response: `## 🎯 Top Job Matches for Your Profile
+            response: `## 🎯 Jobs Matching Your Profile
 
-Based on your skills in **${skills.slice(0, 3).join(', ')}** and ${experience} years of experience, here are your best matches:
+Based on your skills in **${skills.slice(0, 3).join(', ') || 'programming'}** and ${experience} years of experience as a ${careerLevel} professional:
 
----
+### 1. ${careerLevel === 'Senior' ? 'Staff' : 'Senior'} ${domain.includes('Full Stack') ? 'Full Stack' : 'Software'} Engineer
+**Match Score:** ${matchScore1}%
+- ✅ Your ${skills[0] || 'technical'} expertise is a strong match
+${skills.length >= 3 ? `- ✅ ${skills[1]} and ${skills[2]} align with requirements` : '- ⚠️ Consider adding more specialized skills'}
+**Salary Range:** $${careerLevel === 'Senior' ? '180,000 - 240,000' : '140,000 - 180,000'}
 
-### 1. Senior ${domain === 'Full Stack Development' ? 'Full Stack' : 'Software'} Engineer at TechCorp
-**Match Score:** ${matchScore1}% ⭐
+### 2. ${domain.includes('ML') ? 'ML Platform' : 'Platform'} Engineer
+**Match Score:** ${matchScore1 - 10}%
+${skills.includes('AWS') || skills.includes('Kubernetes') ? '- ✅ Strong cloud/infra skills' : '- ⚠️ Would benefit from more cloud experience'}
 
-**Why you're a fit:**
-- ✅ ${skills[0]} expertise required
-- ✅ ${skills[1] || 'Backend'} skills match
-- ✅ Your experience level is ideal
+### 📈 How to Improve Match Scores
+${getMatchImprovementTips(skills)}
 
-**Compensation:** $150,000 - $200,000 + equity  
-**Location:** Remote / San Francisco
-
----
-
-### 2. Staff Engineer at StartupXYZ
-**Match Score:** ${matchScore2}%
-
-**Why you're a fit:**
-- ✅ Technical depth in ${skills[0]}
-- ✅ ${careerLevel} experience level
-- ⚠️ May need more system design experience
-
-**Compensation:** $180,000 - $240,000 + equity  
-**Location:** Remote-first
-
----
-
-### 3. ${domain.includes('ML') ? 'ML' : 'Platform'} Engineer at BigTech Inc
-**Match Score:** ${matchScore3}%
-
-**Why you're a fit:**
-- ✅ Strong ${skills[0]} background
-- ⚠️ ${skills.includes('Kubernetes') ? 'Good K8s knowledge' : 'Would benefit from K8s experience'}
-- ⚠️ Larger company may want more experience
-
-**Compensation:** $160,000 - $220,000  
-**Location:** Hybrid
-
----
-
-### 📈 How to Improve Your Match Scores
-
-1. **Add Kubernetes** to your skillset (+5-10% match)
-2. **Get AWS certification** (+3-5% match)
-3. **Build system design portfolio** (+5-8% match)
-
-Would you like tips on preparing for any of these specific roles?`,
+Would you like tips for any specific role?`,
             type: 'text',
-            sources: [
-                { content: 'Current job market data', source: 'job_postings.json' },
-                { content: 'Salary benchmarks', source: 'skills_taxonomy.json' }
-            ]
+            sources: [{ content: 'Job market data', source: 'job_postings.json' }]
         };
     }
 
-    // 3. Skill Analysis Request
+    // Skill Analysis
     if (inputLower.includes('skill') || inputLower.includes('learn') || inputLower.includes('gap')) {
         return {
             response: `## 📚 Skill Gap Analysis for ${name}
 
 ### ✅ Your Current Strengths
-${skills.map(s => `- **${s}** - Market demand: High`).join('\n')}
-
----
+${skills.length ? skills.map(s => `- **${s}** - Market demand: High`).join('\n') : '- Upload your resume to see your skills analyzed'}
 
 ### 🎯 High-Priority Skills to Learn
-
-Based on your goal of advancing to **Senior/Staff ${domain}**, here are the key skills to focus on:
-
-| Skill | Priority | Salary Premium | Time to Learn |
-|-------|----------|---------------|---------------|
-| System Design | 🔴 Critical | +15-25% | 3-6 months |
-| Kubernetes | 🟠 High | +20% | 2-3 months |
-| ${skills.includes('AWS') ? 'AWS Advanced' : 'AWS Fundamentals'} | 🟠 High | +12% | 2-4 months |
-| Leadership | 🟡 Medium | +10-20% | Ongoing |
-
----
+${getSkillRecommendations(skills, careerLevel)}
 
 ### 📖 Recommended Learning Path
+${getLearningPath(skills, careerLevel)}
 
-**1. System Design (Start Here)**
-- 📚 "Designing Data-Intensive Applications" book
-- 🎓 Educative.io System Design course ($79)
-- ⏱️ 8-10 hours/week for 2 months
-
-**2. Kubernetes**
-- 🎓 CKA Certification prep ($395)
-- 💻 Hands-on with Minikube
-- ⏱️ 5-8 hours/week for 6 weeks
-
-**3. AWS Advanced**
-- 🎓 AWS Solutions Architect Professional
-- 💻 Build 3 production projects
-- ⏱️ 10 hours/week for 2 months
-
----
-
-### 📊 Your Skill Score
-
-\`\`\`
-Current:   ████████░░░░ 68%
-Target:    ████████████ 100%
-Gap:       ████░░░░░░░░ 32%
-\`\`\`
-
-Would you like specific resources for any of these skills?`,
+Would you like specific resources for any skill?`,
             type: 'text',
             sources: [
-                { content: 'Skills demand and salary data', source: 'skills_taxonomy.json' },
-                { content: 'Learning resources and courses', source: 'learning_resources.json' }
+                { content: 'Skills taxonomy', source: 'skills_taxonomy.json' },
+                { content: 'Learning resources', source: 'learning_resources.json' }
             ]
         };
     }
 
-    // 4. Certification Request
-    if (inputLower.includes('certif') || inputLower.includes('credential')) {
-        const hasCerts = profile?.certifications && profile.certifications.length > 0;
-
-        return {
-            response: `## 🏆 Certification Recommendations
-
-${hasCerts ? `**Your Current Certifications:** ${profile?.certifications?.map(c => c.name).join(', ')}\n\n---` : ''}
-
-### Top Certifications for ${domain}
-
-**1. AWS Solutions Architect - Professional** 🌟
-- **Value:** Highly recognized, 15% salary boost
-- **Difficulty:** ⭐⭐⭐⭐ (Hard)
-- **Time:** 80-120 hours study
-- **Cost:** $300 exam
-
-**2. Certified Kubernetes Administrator (CKA)** 🌟
-- **Value:** Hot skill, 20% salary premium for K8s roles
-- **Difficulty:** ⭐⭐⭐⭐ (Hard)
-- **Time:** 40-60 hours study
-- **Cost:** $395 exam
-
-**3. Google Cloud Professional Cloud Architect**
-- **Value:** Growing demand, multi-cloud advantage
-- **Difficulty:** ⭐⭐⭐ (Medium)
-- **Time:** 60-80 hours study
-- **Cost:** $200 exam
-
----
-
-### 📅 Recommended Certification Order
-
-1. **Month 1-2:** AWS Solutions Architect Associate (if not done)
-2. **Month 3-4:** CKA or AWS Professional
-3. **Month 5-6:** Specialty cert based on role
-
-Would you like a detailed study plan for any certification?`,
-            type: 'text',
-            sources: [
-                { content: 'Certification value data', source: 'learning_resources.json' }
-            ]
-        };
-    }
-
-    // 5. Resume/Profile Question
-    if (inputLower.includes('resume') || inputLower.includes('profile') || inputLower.includes('improve')) {
-        return {
-            response: `## 📝 Profile Enhancement Tips
-
-Based on your current profile, here are specific improvements:
-
-### 1. Technical Skills Section
-**Current:** ${skills.length} skills listed
-**Recommendation:** Group by category
-\`\`\`
-Languages: Python, JavaScript, TypeScript
-Frameworks: React, Node.js, Django
-Cloud: AWS (EC2, S3, Lambda)
-DevOps: Docker, Kubernetes, CI/CD
-\`\`\`
-
-### 2. Experience Bullets
-**Use the STAR format:**
-- ❌ "Worked on backend services"
-- ✅ "Architected microservices handling 10K RPS, reducing latency by 40%"
-
-### 3. Add Metrics Everywhere
-- Lines of code → Users impacted
-- "Built features" → "Launched 3 features to 1M+ users"
-- "Improved performance" → "Reduced load time by 60%"
-
-### 4. Missing Sections to Add
-- [ ] Technical blog or portfolio link
-- [ ] Open source contributions
-- [ ] Speaking engagements/leadership
-
-Would you like me to help you rewrite any specific section?`,
-            type: 'text',
-            sources: []
-        };
-    }
-
-    // 6. Interview Prep
-    if (inputLower.includes('interview') || inputLower.includes('prepare')) {
-        return {
-            response: `## 🎤 Interview Preparation Guide
-
-### For ${careerLevel} ${domain} Roles
-
----
-
-### 📋 Interview Types to Expect
-
-| Round | Duration | Focus |
-|-------|----------|-------|
-| Phone Screen | 30 min | Background, motivation |
-| Technical Screen | 60 min | Coding (LeetCode Medium) |
-| System Design | 45-60 min | Architecture, trade-offs |
-| Behavioral | 45 min | Leadership, conflict |
-| Team Fit | 30 min | Culture, questions |
-
----
-
-### 🧠 System Design Prep (Most Important for Senior+)
-
-**Topics to Master:**
-1. Load balancers & CDNs
-2. Database scaling (sharding, replication)
-3. Caching strategies (Redis, CDN)
-4. Message queues (Kafka, SQS)
-5. Microservices patterns
-
-**Practice Problems:**
-- Design Twitter/Instagram feed
-- Design a URL shortener
-- Design a rate limiter
-- Design a chat system
-
----
-
-### 💻 Coding Prep
-
-**Focus Areas:**
-- Arrays & Strings (30% of questions)
-- Trees & Graphs (25%)
-- Dynamic Programming (20%)
-- System manipulation (15%)
-
-**Daily Practice:**
-- 1-2 LeetCode Medium problems
-- Review solutions after each attempt
-- Track patterns, not just solutions
-
----
-
-### 🗣️ Behavioral Prep (STAR Method)
-
-Prepare stories for:
-1. Technical leadership example
-2. Conflict resolution
-3. Failure and learning
-4. Mentoring experience
-5. Biggest technical achievement
-
-Would you like mock interview questions for any area?`,
-            type: 'text',
-            sources: []
-        };
-    }
-
-    // Default: General greeting and guidance
+    // Default greeting
     return {
         response: `## 👋 Hi ${name}! I'm your Career AI Mentor
 
-Great to see you! Based on your profile, here's what I know about you:
+${profile?.summary ? `I see you're a ${profile.summary.substring(0, 100)}...` : ''}
 
-**📊 Quick Profile Summary**
+**📊 Your Profile Summary:**
 - **Level:** ${careerLevel} ${domain}
 - **Experience:** ${experience} years
-- **Top Skills:** ${skills.slice(0, 5).join(', ')}
+- **Top Skills:** ${skills.slice(0, 5).join(', ') || 'Upload resume for analysis'}
+${certs.length ? `- **Certifications:** ${certs.map(c => c.name).join(', ')}` : ''}
 
----
+### 🎯 What I Can Help With:
+1. **🗺️ Career Roadmap** - "Create a career roadmap for me"
+2. **🎯 Job Matching** - "What jobs match my profile?"
+3. **📚 Skill Analysis** - "What skills should I learn?"
+4. **🎤 Interview Prep** - "Help me prepare for interviews"
 
-### 🎯 Here's What I Can Help You With
-
-1. **🗺️ Career Roadmap** - Get a personalized 12-week growth plan
-2. **🎯 Job Matching** - Find roles that match your skills
-3. **📚 Skill Analysis** - Identify gaps and learning priorities
-4. **🏆 Certifications** - Recommendations for career advancement
-5. **🎤 Interview Prep** - Practice and strategies
-
----
-
-### 💡 Try Asking Me:
-
-> "What skills should I learn next?"
-
-> "Create a career roadmap for me"
-
-> "What jobs match my profile?"
-
-> "Help me prepare for interviews"
-
-What would you like to explore first?`,
+What would you like to explore?`,
         type: 'text',
         sources: []
     };
+}
+
+// Helper functions for personalized recommendations
+function getWeek1to4Recommendations(skills: string[], level: string): string {
+    const needsSystemDesign = level === 'Senior' || level === 'Staff';
+    const hasAWS = skills.includes('AWS');
+
+    return `**Week 1-2: ${needsSystemDesign ? 'System Design Mastery' : 'Technical Fundamentals'}**
+- ${needsSystemDesign ? 'Complete system design interview prep' : 'Strengthen core programming skills'}
+- Build a project demonstrating ${skills[0] || 'your skills'}
+
+**Week 3-4: ${hasAWS ? 'Advanced AWS' : 'Cloud Fundamentals'}**
+- ${hasAWS ? 'Study for AWS Solutions Architect Professional' : 'Get AWS Cloud Practitioner certification'}
+- Deploy a serverless application`;
+}
+
+function getWeek5to8Recommendations(skills: string[], level: string): string {
+    const hasK8s = skills.includes('Kubernetes');
+
+    return `**Week 5-6: ${hasK8s ? 'Advanced Kubernetes' : 'Container Orchestration'}**
+- ${hasK8s ? 'Prepare for CKA certification' : 'Learn Kubernetes fundamentals'}
+- Set up a CI/CD pipeline
+
+**Week 7-8: ${level === 'Senior' ? 'Leadership Development' : 'Collaboration Skills'}**
+- ${level === 'Senior' ? 'Lead a technical design review' : 'Contribute to team discussions'}
+- Write a technical blog post`;
+}
+
+function getWeek9to12Recommendations(skills: string[]): string {
+    return `**Week 9-10: Portfolio Project**
+- Build a full-stack project showcasing ${skills.slice(0, 3).join(', ') || 'your skills'}
+- Include documentation and deployment
+
+**Week 11-12: Job Application**
+- Update resume with new achievements
+- Apply to 10+ target companies
+- Practice mock interviews`;
+}
+
+function getMatchImprovementTips(skills: string[]): string {
+    const tips: string[] = [];
+    if (!skills.includes('Kubernetes')) tips.push('- Learn **Kubernetes** (+5-10% match)');
+    if (!skills.includes('AWS')) tips.push('- Get **AWS certification** (+3-5% match)');
+    if (!skills.includes('System Design')) tips.push('- Practice **system design** (+5-8% match)');
+    return tips.length ? tips.join('\n') : '- Continue building expertise in your current stack';
+}
+
+function getSkillRecommendations(skills: string[], level: string): string {
+    const recs: string[] = [];
+
+    if (!skills.includes('System Design') && (level === 'Senior' || level === 'Mid')) {
+        recs.push('| System Design | 🔴 Critical | +15-25% | 3-6 months |');
+    }
+    if (!skills.includes('Kubernetes')) {
+        recs.push('| Kubernetes | 🟠 High | +20% | 2-3 months |');
+    }
+    if (!skills.includes('AWS') && !skills.includes('Azure') && !skills.includes('GCP')) {
+        recs.push('| Cloud (AWS/GCP) | 🟠 High | +12% | 2-4 months |');
+    }
+
+    return `| Skill | Priority | Salary Premium | Time |\n|-------|----------|---------------|------|\n${recs.join('\n') || '| Advanced ${skills[0] || "Tech"} | 🟡 Medium | +10% | Ongoing |'}`;
+}
+
+function getLearningPath(skills: string[], level: string): string {
+    if (level === 'Senior' || level === 'Staff') {
+        return `1. **System Design** - "Designing Data-Intensive Applications" book
+2. **Leadership** - Engineering Management courses
+3. **Architecture** - Cloud certification (Professional level)`;
+    }
+    return `1. **Core Skills** - Strengthen ${skills[0] || 'programming'} fundamentals
+2. **Cloud Basics** - AWS/GCP Cloud Practitioner
+3. **DevOps** - Docker & CI/CD basics`;
 }

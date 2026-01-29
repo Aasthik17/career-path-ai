@@ -1,0 +1,29 @@
+Aasthik Upadhyay
+Software Engineer
+aasthik.upadhyay@amazon.com
+Dehradun, UK, India
+
+SUMMARY
+Experienced software engineer with 2 years of experience building web applications.
+
+SKILLS
+Technical: Python, TypeScript, React, Node.js, AWS, Docker, Kubernetes, PostgreSQL, MongoDB
+Soft Skills: Leadership, Communication, Problem Solving
+
+EXPERIENCE
+Software Engineer | Amazon | 2021 - Present
+- Led development of microservices architecture
+- Mentored junior engineers
+- Improved system performance by 40%
+
+Software Engineer Intern | Amazon | 2018 - 2021
+- Built full-stack applications using React and Node.js
+- Implemented CI/CD pipelines
+
+EDUCATION 
+Bachelor of Science in Computer Science
+UPES, 2027
+
+CERTIFICATIONS
+- AWS Solutions Architect Associate
+- Kubernetes Administrator (CKA)

@@ -22,8 +22,20 @@ export default function Home() {
   const [parsedResume, setParsedResume] = useState<ParsedResume | null>(null);
 
   const handleResumeUpload = (data: { resumeText: string; parsedResume: Record<string, unknown> }) => {
-    setParsedResume(data.parsedResume as unknown as ParsedResume);
+    console.log('Resume upload received:', data);
+    const parsed = data.parsedResume as unknown as ParsedResume;
+    console.log('Parsed resume:', parsed);
+    console.log('Skills:', parsed?.skills?.technical);
+
+    setParsedResume(parsed);
     setResumeUploaded(true);
+
+    // Save to localStorage for use in chat and dashboard pages
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('careerpath_resume', JSON.stringify(parsed));
+      localStorage.setItem('careerpath_resume_text', data.resumeText);
+      console.log('Saved to localStorage');
+    }
   };
 
   return (
