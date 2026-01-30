@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
-  Sparkles,
   Upload,
   MessageSquare,
   BarChart3,
@@ -49,9 +49,13 @@ export default function Home() {
       {/* Navigation */}
       <nav className="relative z-10 flex items-center justify-between px-8 py-4 border-b border-gray-800/50 backdrop-blur-sm">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
-            <Sparkles className="w-6 h-6 text-white" />
-          </div>
+          <Image
+            src="/logo.png"
+            alt="CareerPath AI Logo"
+            width={48}
+            height={48}
+            className="object-contain"
+          />
           <span className="text-xl font-bold text-white">CareerPath AI</span>
         </div>
         <div className="flex items-center gap-6">
@@ -219,7 +223,13 @@ export default function Home() {
         <footer className="mt-32 pt-8 border-t border-gray-800">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-cyan-500" />
+              <Image
+                src="/logo.png"
+                alt="CareerPath AI Logo"
+                width={32}
+                height={32}
+                className="object-contain"
+              />
               <span className="text-gray-400">CareerPath AI</span>
             </div>
             <p className="text-sm text-gray-500">

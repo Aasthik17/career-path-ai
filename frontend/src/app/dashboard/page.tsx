@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
-    Sparkles,
     ArrowLeft,
     MessageSquare,
     TrendingUp,
@@ -149,9 +149,13 @@ export default function DashboardPage() {
                         </Link>
                         <div className="h-6 w-px bg-gray-700" />
                         <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
-                                <Sparkles className="w-4 h-4 text-white" />
-                            </div>
+                            <Image
+                                src="/logo.png"
+                                alt="CareerPath AI Logo"
+                                width={32}
+                                height={32}
+                                className="object-contain"
+                            />
                             <span className="font-semibold text-white">CareerPath AI</span>
                         </div>
                     </div>
