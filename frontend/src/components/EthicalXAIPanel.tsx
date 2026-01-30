@@ -196,7 +196,7 @@ export default function EthicalXAIPanel({ userProfile }: EthicalXAIPanelProps) {
                             <p className="text-xs text-gray-400">Explainable AI evaluation for fair recommendations</p>
                             {/* Model badge */}
                             <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs ${mode === 'bedrock'
-                                    ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
+                                    ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
                                     : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
                                 }`}>
                                 <Cpu className="w-3 h-3" />
@@ -207,7 +207,7 @@ export default function EthicalXAIPanel({ userProfile }: EthicalXAIPanelProps) {
                 </div>
                 <div className="flex items-center gap-3">
                     {isLoading ? (
-                        <Loader2 className="w-5 h-5 text-cyan-400 animate-spin" />
+                        <Loader2 className="w-5 h-5 text-purple-400 animate-spin" />
                     ) : (
                         <span className={`px-3 py-1 text-xs font-medium rounded-full border ${getRiskColor(evaluation.bias_assessment.overall_risk)}`}>
                             {evaluation.bias_assessment.overall_risk.toUpperCase()} BIAS RISK
@@ -226,17 +226,17 @@ export default function EthicalXAIPanel({ userProfile }: EthicalXAIPanelProps) {
                 <div className="px-6 pb-6 space-y-6">
                     {/* Model Info Banner */}
                     {model && (
-                        <div className="flex items-center gap-2 p-3 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
-                            <Cpu className="w-4 h-4 text-cyan-400" />
+                        <div className="flex items-center gap-2 p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-purple-500/10 border border-purple-500/20">
+                            <Cpu className="w-4 h-4 text-purple-400" />
                             <span className="text-xs text-gray-300">
-                                Powered by <span className="font-semibold text-cyan-400">{model}</span> — Amazon Bedrock Foundation Model
+                                Powered by <span className="font-semibold text-purple-400">{model}</span> — Amazon Bedrock Foundation Model
                             </span>
                         </div>
                     )}
 
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-12 gap-4">
-                            <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+                            <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
                             <p className="text-sm text-gray-400">Analyzing recommendations for ethical considerations...</p>
                         </div>
                     ) : (
@@ -266,7 +266,7 @@ export default function EthicalXAIPanel({ userProfile }: EthicalXAIPanelProps) {
                                 {evaluation.bias_assessment.checks.length > 2 && (
                                     <button
                                         onClick={() => setShowAllChecks(!showAllChecks)}
-                                        className="mt-2 text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
+                                        className="mt-2 text-xs text-purple-400 hover:text-purple-300 transition-colors"
                                     >
                                         {showAllChecks ? 'Show less' : `Show ${evaluation.bias_assessment.checks.length - 2} more checks`}
                                     </button>
@@ -301,7 +301,7 @@ export default function EthicalXAIPanel({ userProfile }: EthicalXAIPanelProps) {
                             {/* Transparency Checklist */}
                             <div>
                                 <div className="flex items-center gap-2 mb-3">
-                                    <Eye className="w-4 h-4 text-cyan-500" />
+                                    <Eye className="w-4 h-4 text-purple-500" />
                                     <h4 className="text-sm font-medium text-white">Transparency Checklist</h4>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
@@ -336,7 +336,7 @@ export default function EthicalXAIPanel({ userProfile }: EthicalXAIPanelProps) {
                                     <ul className="space-y-2">
                                         {evaluation.recommendations.map((rec, idx) => (
                                             <li key={idx} className="flex items-start gap-2 text-xs text-gray-400">
-                                                <span className="text-cyan-400 mt-0.5">•</span>
+                                                <span className="text-purple-400 mt-0.5">•</span>
                                                 {rec}
                                             </li>
                                         ))}

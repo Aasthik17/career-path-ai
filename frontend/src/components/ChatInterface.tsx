@@ -138,7 +138,7 @@ What would you like to explore first?`,
         <div className="flex flex-col h-[600px] bg-gradient-to-br from-gray-900 to-gray-950 rounded-2xl border border-gray-800 overflow-hidden shadow-2xl">
             {/* Header */}
             <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-800 bg-gray-900/50 backdrop-blur">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
                     <Bot className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -159,13 +159,13 @@ What would you like to explore first?`,
                         className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
                         {message.role === 'assistant' && (
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center flex-shrink-0">
                                 <Sparkles className="w-4 h-4 text-white" />
                             </div>
                         )}
                         <div
                             className={`max-w-[80%] rounded-2xl px-4 py-3 ${message.role === 'user'
-                                    ? 'bg-gradient-to-br from-cyan-600 to-purple-600 text-white'
+                                    ? 'bg-gradient-to-br from-purple-600 to-purple-600 text-white'
                                     : 'bg-gray-800 text-gray-100'
                                 }`}
                         >
@@ -200,7 +200,7 @@ What would you like to explore first?`,
 
                 {isLoading && (
                     <div className="flex gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
                             <Loader2 className="w-4 h-4 text-white animate-spin" />
                         </div>
                         <div className="bg-gray-800 rounded-2xl px-4 py-3">
@@ -250,13 +250,13 @@ What would you like to explore first?`,
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                         placeholder="Ask about your career..."
-                        className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
+                        className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
                         disabled={isLoading}
                     />
                     <button
                         onClick={sendMessage}
                         disabled={isLoading || !inputValue.trim()}
-                        className="px-4 py-3 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-white transition-all"
+                        className="px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-500 hover:to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-white transition-all"
                     >
                         <Send className="w-5 h-5" />
                     </button>

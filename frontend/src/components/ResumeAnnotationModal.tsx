@@ -103,7 +103,7 @@ export default function ResumeAnnotationModal({ isOpen, onClose, resumeText }: R
                 <div className="flex-1 overflow-y-auto p-6">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20">
-                            <Loader2 className="w-10 h-10 text-cyan-500 animate-spin mb-4" />
+                            <Loader2 className="w-10 h-10 text-purple-500 animate-spin mb-4" />
                             <p className="text-gray-400">Analyzing your resume with AI...</p>
                             <p className="text-sm text-gray-500 mt-2">This may take a few seconds</p>
                         </div>
@@ -113,7 +113,7 @@ export default function ResumeAnnotationModal({ isOpen, onClose, resumeText }: R
                             <p className="text-red-400">{error}</p>
                             <button
                                 onClick={analyzeResume}
-                                className="mt-4 px-4 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-white transition-colors"
+                                className="mt-4 px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg text-white transition-colors"
                             >
                                 Try Again
                             </button>

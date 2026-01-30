@@ -147,13 +147,13 @@ export default function ResumeUpload({ onUploadComplete }: ResumeUploadProps) {
 
                 {/* Animated background gradient */}
                 <div className="absolute inset-0 opacity-30">
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
                 </div>
 
                 <div className="relative z-10 p-12 text-center">
                     {uploadStatus === 'idle' && (
                         <>
-                            <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg shadow-purple-500/30">
+                            <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg shadow-purple-500/30">
                                 <Upload className="w-10 h-10 text-white" />
                             </div>
                             <h3 className="text-2xl font-bold text-white mb-2">

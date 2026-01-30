@@ -124,13 +124,13 @@ export default function SkillGapChart({ userSkills = [], targetRole = 'Senior So
             <div className="flex items-center justify-between mb-6">
                 <div>
                     <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Target className="w-5 h-5 text-cyan-500" />
+                        <Target className="w-5 h-5 text-purple-500" />
                         Skill Gap Analysis
                     </h3>
                     <p className="text-gray-400 text-sm mt-1">Target: {targetRole}</p>
                 </div>
                 <div className="text-right">
-                    <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
+                    <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-500">
                         {overallReadiness}%
                     </div>
                     <p className="text-gray-400 text-sm">Career Ready</p>
