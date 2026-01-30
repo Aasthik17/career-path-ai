@@ -18,6 +18,7 @@ import {
 import SkillGapChart from '@/components/SkillGapChart';
 import RoadmapTimeline from '@/components/RoadmapTimeline';
 import ResumeAnnotationModal from '@/components/ResumeAnnotationModal';
+import EthicalXAIPanel from '@/components/EthicalXAIPanel';
 import type { ParsedResume } from '@/lib/types';
 
 export default function DashboardPage() {
@@ -258,6 +259,11 @@ export default function DashboardPage() {
 
                         {/* Career Roadmap */}
                         <RoadmapTimeline currentWeek={1} />
+                    </div>
+
+                    {/* AI Ethics & Transparency Panel */}
+                    <div className="mt-8">
+                        <EthicalXAIPanel userProfile={userProfile} />
                     </div>
 
                     {/* Profile Summary */}

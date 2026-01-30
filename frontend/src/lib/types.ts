@@ -106,6 +106,29 @@ export interface Resource {
     description?: string;
 }
 
+export interface EthicalEvaluation {
+    bias_assessment: {
+        overall_risk: 'low' | 'medium' | 'high';
+        checks: {
+            name: string;
+            status: 'pass' | 'warning' | 'fail';
+            description: string;
+        }[];
+    };
+    fairness_metrics: {
+        demographic_parity: number;
+        equal_opportunity: number;
+        diversity_score: number;
+    };
+    transparency: {
+        data_sources_disclosed: boolean;
+        model_limitations_stated: boolean;
+        confidence_provided: boolean;
+        human_review_recommended: boolean;
+    };
+    recommendations: string[];
+}
+
 export interface Explainability {
     source_quotes: {
         text: string;
@@ -113,6 +136,7 @@ export interface Explainability {
         relevance: string;
     }[];
     reasoning_steps: string[];
+    ethical_evaluation?: EthicalEvaluation;
 }
 
 export interface CareerRoadmap {

@@ -223,7 +223,7 @@ export default function Home() {
               <span className="text-gray-400">CareerPath AI</span>
             </div>
             <p className="text-sm text-gray-500">
-              Powered by Amazon Bedrock • Built for Hackathon 2024
+              Powered by Amazon Bedrock • Built for Hackathon 2026
             </p>
           </div>
         </footer>
