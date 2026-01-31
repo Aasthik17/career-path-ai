@@ -43,10 +43,10 @@ export default function Home() {
       {/* Enhanced animated background with waves and glows */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {/* Purple glow orbs */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute top-1/3 right-0 w-80 h-80 bg-purple-500/15 rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-700/20 rounded-full blur-[80px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-fuchsia-600/10 rounded-full blur-[100px]" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-900/20 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute top-1/3 right-0 w-80 h-80 bg-blue-800/15 rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-blue-950/20 rounded-full blur-[80px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-amber-400/10 rounded-full blur-[100px]" />
 
         {/* Animated wave SVG background */}
         <svg
@@ -56,9 +56,9 @@ export default function Home() {
         >
           <defs>
             <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.3" />
-              <stop offset="50%" stopColor="#a855f7" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#c084fc" stopOpacity="0.2" />
+              <stop offset="0%" stopColor="#1e3a5f" stopOpacity="0.4" />
+              <stop offset="50%" stopColor="#2563eb" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#d4a574" stopOpacity="0.2" />
             </linearGradient>
           </defs>
           <path
@@ -72,15 +72,15 @@ export default function Home() {
           preserveAspectRatio="none"
         >
           <path
-            fill="#a855f7"
+            fill="#1e40af"
             d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,218.7C672,235,768,245,864,234.7C960,224,1056,192,1152,181.3C1248,171,1344,181,1392,186.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
           />
         </svg>
 
         {/* Floating particles */}
-        <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-purple-400/40 rounded-full animate-bounce" style={{ animationDelay: '0s', animationDuration: '3s' }} />
-        <div className="absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-purple-300/30 rounded-full animate-bounce" style={{ animationDelay: '1s', animationDuration: '4s' }} />
-        <div className="absolute bottom-1/3 left-1/2 w-1 h-1 bg-fuchsia-400/40 rounded-full animate-bounce" style={{ animationDelay: '2s', animationDuration: '5s' }} />
+        <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-amber-300/40 rounded-full animate-bounce" style={{ animationDelay: '0s', animationDuration: '3s' }} />
+        <div className="absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-amber-200/30 rounded-full animate-bounce" style={{ animationDelay: '1s', animationDuration: '4s' }} />
+        <div className="absolute bottom-1/3 left-1/2 w-1 h-1 bg-amber-200/40 rounded-full animate-bounce" style={{ animationDelay: '2s', animationDuration: '5s' }} />
       </div>
 
       {/* Navigation */}
@@ -102,9 +102,6 @@ export default function Home() {
           <Link href="/dashboard" className="text-gray-400 hover:text-white transition-colors">
             Dashboard
           </Link>
-          <button className="px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-500 hover:to-purple-500 rounded-lg text-white font-medium transition-all shadow-lg shadow-purple-500/20">
-            Sign In
-          </button>
         </div>
       </nav>
 
@@ -119,7 +116,7 @@ export default function Home() {
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
             <span className="text-white">Your AI-Powered</span>
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-purple-400 to-pink-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-300 to-amber-400">
               Career Mentor
             </span>
           </h1>
@@ -132,7 +129,7 @@ export default function Home() {
           <div className="flex justify-center gap-4 mb-12">
             <Link
               href="#upload"
-              className="px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-500 hover:to-purple-500 rounded-xl text-white font-semibold text-lg transition-all shadow-lg shadow-purple-500/30 flex items-center gap-2"
+              className="px-8 py-4 bg-gradient-to-r from-blue-900 to-blue-900 hover:from-blue-800 hover:to-blue-800 rounded-xl text-white font-semibold text-lg transition-all shadow-lg shadow-blue-800/30 flex items-center gap-2"
             >
               Get Started Free
               <ArrowRight className="w-5 h-5" />
@@ -157,10 +154,10 @@ export default function Home() {
           ].map((feature, idx) => (
             <div
               key={idx}
-              className="p-6 bg-gray-900/50 backdrop-blur-sm border border-purple-500/20 rounded-2xl hover:border-purple-500/40 hover:bg-gray-800/50 transition-all duration-300 group hover:shadow-lg hover:shadow-purple-500/10"
+              className="p-6 bg-gray-900/50 backdrop-blur-sm border border-blue-800/20 rounded-2xl hover:border-blue-800/40 hover:bg-gray-800/50 transition-all duration-300 group hover:shadow-lg hover:shadow-blue-800/10"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600/30 to-fuchsia-600/30 flex items-center justify-center mb-4 group-hover:from-purple-500/50 group-hover:to-fuchsia-500/50 transition-all duration-300 group-hover:scale-110">
-                <feature.icon className="w-6 h-6 text-purple-300" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-900/30 to-amber-400/30 flex items-center justify-center mb-4 group-hover:from-blue-800/50 group-hover:to-amber-300/50 transition-all duration-300 group-hover:scale-110">
+                <feature.icon className="w-6 h-6 text-amber-200" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
               <p className="text-gray-400 text-sm">{feature.desc}</p>
@@ -198,7 +195,7 @@ export default function Home() {
                 </p>
                 <div className="flex flex-wrap gap-2 justify-center">
                   {parsedResume.skills?.technical?.slice(0, 5).map((skill: string, idx: number) => (
-                    <span key={idx} className="px-2 py-1 text-xs bg-purple-500/20 text-purple-400 rounded-lg">
+                    <span key={idx} className="px-2 py-1 text-xs bg-blue-800/20 text-amber-300 rounded-lg">
                       {skill}
                     </span>
                   ))}
@@ -208,7 +205,7 @@ export default function Home() {
               <div className="flex justify-center gap-4">
                 <Link
                   href="/chat"
-                  className="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-500 hover:to-purple-500 rounded-xl text-white font-medium transition-all flex items-center gap-2"
+                  className="px-6 py-3 bg-gradient-to-r from-blue-900 to-blue-900 hover:from-blue-800 hover:to-blue-800 rounded-xl text-white font-medium transition-all flex items-center gap-2"
                 >
                   <MessageSquare className="w-5 h-5" />
                   Chat with AI Mentor
@@ -240,7 +237,7 @@ export default function Home() {
             ].map((item, idx) => (
               <div key={idx} className="flex items-center gap-4">
                 <div className="relative">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-purple-500/30">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-900 flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-blue-800/30">
                     {item.step}
                   </div>
                 </div>

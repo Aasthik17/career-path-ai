@@ -147,13 +147,13 @@ export default function ResumeUpload({ onUploadComplete }: ResumeUploadProps) {
 
                 {/* Animated background gradient */}
                 <div className="absolute inset-0 opacity-30">
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-800/20 via-blue-800/20 to-pink-500/20 animate-pulse" />
                 </div>
 
                 <div className="relative z-10 p-12 text-center">
                     {uploadStatus === 'idle' && (
                         <>
-                            <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg shadow-purple-500/30">
+                            <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-blue-800 to-blue-900 flex items-center justify-center mb-6 shadow-lg shadow-blue-800/30">
                                 <Upload className="w-10 h-10 text-white" />
                             </div>
                             <h3 className="text-2xl font-bold text-white mb-2">
@@ -178,7 +178,7 @@ export default function ResumeUpload({ onUploadComplete }: ResumeUploadProps) {
 
                     {uploadStatus === 'parsing' && (
                         <>
-                            <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center mb-6 animate-pulse">
+                            <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-blue-800 to-pink-600 flex items-center justify-center mb-6 animate-pulse">
                                 <FileText className="w-10 h-10 text-white" />
                             </div>
                             <h3 className="text-2xl font-bold text-white mb-2">Analyzing Resume...</h3>
@@ -187,7 +187,7 @@ export default function ResumeUpload({ onUploadComplete }: ResumeUploadProps) {
                                 {[0, 1, 2].map((i) => (
                                     <div
                                         key={i}
-                                        className="w-3 h-3 rounded-full bg-purple-500 animate-bounce"
+                                        className="w-3 h-3 rounded-full bg-blue-800 animate-bounce"
                                         style={{ animationDelay: `${i * 0.1}s` }}
                                     />
                                 ))}

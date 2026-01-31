@@ -214,7 +214,7 @@ export default function RoadmapTimeline({ weeks, currentWeek = 1 }: RoadmapTimel
             case 'completed':
                 return <CheckCircle2 className="w-5 h-5 text-green-500" />;
             case 'current':
-                return <Circle className="w-5 h-5 text-purple-500 fill-purple-500/30" />;
+                return <Circle className="w-5 h-5 text-blue-800 fill-blue-800/30" />;
             default:
                 return <Circle className="w-5 h-5 text-gray-600" />;
         }
@@ -225,7 +225,7 @@ export default function RoadmapTimeline({ weeks, currentWeek = 1 }: RoadmapTimel
             case 'completed':
                 return 'border-green-500 bg-green-500/10';
             case 'current':
-                return 'border-purple-500 bg-purple-500/10';
+                return 'border-blue-800 bg-blue-800/10';
             default:
                 return 'border-gray-700 bg-gray-800/50';
         }
@@ -243,7 +243,7 @@ export default function RoadmapTimeline({ weeks, currentWeek = 1 }: RoadmapTimel
             <div className="flex items-center justify-between mb-6">
                 <div>
                     <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Calendar className="w-5 h-5 text-purple-500" />
+                        <Calendar className="w-5 h-5 text-blue-800" />
                         12-Week Career Roadmap
                     </h3>
                     <p className="text-gray-400 text-sm mt-1">
@@ -262,7 +262,7 @@ export default function RoadmapTimeline({ weeks, currentWeek = 1 }: RoadmapTimel
             <div className="mb-6">
                 <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
                     <div
-                        className="h-full bg-gradient-to-r from-purple-500 to-purple-500 rounded-full transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-blue-800 to-blue-800 rounded-full transition-all duration-500"
                         style={{ width: `${(currentWeek / 12) * 100}%` }}
                     />
                 </div>
@@ -297,7 +297,7 @@ export default function RoadmapTimeline({ weeks, currentWeek = 1 }: RoadmapTimel
                                             {week.timeHours} hours
                                         </span>
                                         {week.milestone && (
-                                            <span className="text-xs text-purple-400 flex items-center gap-1">
+                                            <span className="text-xs text-amber-300 flex items-center gap-1">
                                                 <Trophy className="w-3 h-3" />
                                                 {week.milestone}
                                             </span>
@@ -323,7 +323,7 @@ export default function RoadmapTimeline({ weeks, currentWeek = 1 }: RoadmapTimel
                                     <ul className="space-y-1.5">
                                         {week.tasks.map((task, idx) => (
                                             <li key={idx} className="flex items-start gap-2 text-sm text-gray-300">
-                                                <span className="text-purple-500 mt-1">•</span>
+                                                <span className="text-blue-800 mt-1">•</span>
                                                 {task}
                                             </li>
                                         ))}
@@ -366,7 +366,7 @@ export default function RoadmapTimeline({ weeks, currentWeek = 1 }: RoadmapTimel
                     Completed
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-400">
-                    <Circle className="w-4 h-4 text-purple-500 fill-purple-500/30" />
+                    <Circle className="w-4 h-4 text-blue-800 fill-blue-800/30" />
                     Current
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-400">

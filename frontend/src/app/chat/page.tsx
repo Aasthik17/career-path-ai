@@ -86,7 +86,7 @@ export default function ChatPage() {
     if (isLoading) {
         return (
             <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500" />
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-800" />
             </div>
         );
     }
@@ -97,8 +97,8 @@ export default function ChatPage() {
         <main className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
             {/* Background effects */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-purple-500/10 via-transparent to-transparent rounded-full blur-3xl" />
-                <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-purple-500/10 via-transparent to-transparent rounded-full blur-3xl" />
+                <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-blue-800/10 via-transparent to-transparent rounded-full blur-3xl" />
+                <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-blue-800/10 via-transparent to-transparent rounded-full blur-3xl" />
             </div>
 
             {/* Navigation */}
@@ -146,7 +146,7 @@ export default function ChatPage() {
                 {userProfile ? (
                     <div className="bg-gray-800/30 border border-gray-700/50 rounded-xl p-4 mb-6 flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-xl font-bold text-white">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-800 to-blue-900 flex items-center justify-center text-xl font-bold text-white">
                                 {getName().charAt(0)}
                             </div>
                             <div>
@@ -160,7 +160,7 @@ export default function ChatPage() {
                             <div className="flex flex-wrap gap-2 max-w-md">
                                 {validSkills.length > 0 ? (
                                     validSkills.slice(0, 5).map((skill, idx) => (
-                                        <span key={idx} className="px-2 py-1 text-xs bg-purple-500/20 text-purple-400 rounded-lg">
+                                        <span key={idx} className="px-2 py-1 text-xs bg-blue-800/20 text-amber-300 rounded-lg">
                                             {skill}
                                         </span>
                                     ))
@@ -182,7 +182,7 @@ export default function ChatPage() {
                         <p className="text-gray-400 mb-4">No resume uploaded yet. Upload your resume to get personalized advice!</p>
                         <Link
                             href="/#upload"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-600 rounded-lg text-white"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-900 to-blue-900 rounded-lg text-white"
                         >
                             <Upload className="w-4 h-4" />
                             Upload Resume
