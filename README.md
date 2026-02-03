@@ -21,6 +21,20 @@ CareerPath AI is an intelligent career mentoring platform that analyzes your res
 
 ---
 
+## 🖼️ Product Screenshots
+
+| Landing Page | Resume Analysis |
+|-------------|----------------|
+| ![Landing Page](./screenshots/landing.png) | ![Resume Analysis](./screenshots/resume-analysis.png) |
+| *AI-powered career mentor homepage* | *Resume upload & analysis success* |
+
+| Skill Gap Analysis | Career Roadmap |
+|-------------------|----------------|
+| ![Skill Gap](./screenshots/skills.png) | ![Roadmap](./screenshots/roadmap.png) |
+| *Current skills & recommendations* | *Interactive skill radar chart & 12-week personalized roadmap* |
+
+---
+
 ## 🏗️ Architecture
 
 ```
