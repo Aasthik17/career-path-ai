@@ -262,7 +262,7 @@ MIT License - see [LICENSE](LICENSE)
 
 ## 🙏 Acknowledgments
 
-Built for the AWS Hackathon 2024 using:
+Built for the IBM & AWS Hackathon 2026 using:
 - Amazon Bedrock Knowledge Bases
 - Amazon Titan Embed Text v2
 - Amazon Nova Pro v1
