@@ -39,26 +39,26 @@ CareerPath AI is an intelligent career mentoring platform that analyzes your res
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                           CareerPath AI Architecture                     │
+│                           CareerPath AI Architecture                    │
 ├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
+│                                                                         │
 │  ┌──────────────┐     ┌────────────────┐     ┌──────────────────────┐   │
 │  │   Frontend   │────▶│  API Gateway   │────▶│   Lambda Functions   │   │
 │  │  (Next.js)   │     │   (REST API)   │     │  - Resume Parser     │   │
 │  └──────────────┘     └────────────────┘     │  - Embedding Pipeline│   │
-│         │                                     │  - RAG Retriever     │   │
-│         ▼                                     │  - Agent Orchestrator│   │
+│         │                                    │  - RAG Retriever     │   │
+│         ▼                                    │  - Agent Orchestrator│   │
 │  ┌──────────────┐                            └──────────────────────┘   │
 │  │   Cognito    │                                      │                │
 │  │  (Auth)      │                                      ▼                │
 │  └──────────────┘     ┌─────────────────────────────────────────────┐   │
-│                       │            Amazon Bedrock                    │   │
+│                       │            Amazon Bedrock                   │   │
 │  ┌──────────────┐     │  ┌─────────────────┐  ┌──────────────────┐  │   │
 │  │     S3       │────▶│  │ Knowledge Base  │  │   Nova Pro v1    │  │   │
 │  │  - Resumes   │     │  │ (Titan Embed v2)│  │   (Generation)   │  │   │
 │  │  - Data      │     │  └─────────────────┘  └──────────────────┘  │   │
 │  └──────────────┘     └─────────────────────────────────────────────┘   │
-│                                                                          │
+│                                                                         │
 │  Region: us-east-1 │ Service Role: hackathon-bedrock-kb-role            │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
